@@ -49,9 +49,14 @@ public abstract class Instruction {
 	}
 
 	// TODO: What does abstract in the declaration below mean?
-	//       (Write a short explanation.)
+	// abstract here means that a non-abstract (concrete) subclass that extends Instruction.java
+	// must implement the method.
 	@Override
 	public abstract String toString();
+
+	public abstract boolean equals(Object obj);
+
+	public abstract int hashCode();
 
 	// TODO: Make sure that subclasses also implement equals and hashCode (needed in class Machine).
 }
