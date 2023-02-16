@@ -1,0 +1,3 @@
+After implementing base reflection API
+Scrap switch and replace with reflection API and make a commit
+Then replace reflection API with Spring and commit again
