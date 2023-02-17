@@ -39,6 +39,7 @@ public class AddInstruction extends Instruction {
 
 	@Override
 	public boolean equals(Object o) {
+		// i dont think the below 2 lines are necessary
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 
