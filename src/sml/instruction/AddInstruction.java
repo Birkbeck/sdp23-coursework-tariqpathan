@@ -38,12 +38,21 @@ public class AddInstruction extends Instruction {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+
+		if (o instanceof AddInstruction other) {
+			return Objects.equals(this.label, other.label)
+					&& Objects.equals(this.result, other.result)
+					&& Objects.equals(this.source, other.source);
+		}
 		return false;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(result, source);
+		return Objects.hash(result, source, OP_CODE);
 	}
 }
