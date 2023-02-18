@@ -1,3 +1,34 @@
 After implementing base reflection API
 Scrap switch and replace with reflection API and make a commit
 Then replace reflection API with Spring and commit again
+
+No two instructions can have the same label
+Labels end with a colon but the colon is not part of the name
+Adjacent fields of an instruction is separated by whitespace (is this space only?)
+
+---
+Labels.java
+labels is a hashmap of <String, Integer> which is <label, address>
+---
+Registers.java
+registers is a map of <Register, Integer>
+Register is an enum.
+---
+Machine.java
+initializes labels
+initializes program which is a List<Instruction>
+initializes registers
+
+programCounter starts at 0
+
+The execute method has a while loop (while programCounter < program.size())
+This is the size of the List of Instructions
+########
+How does the machine get the List of Instructions?
+########
+
+Instructions return a NORMAL_PROGRAM_COUNTER_UPDATE integer which is set to -1
+If the programCounterUpdate value is -1, then the programCounter increments by 1
+And moves to the next Instruction (if there is any).
+
+---
