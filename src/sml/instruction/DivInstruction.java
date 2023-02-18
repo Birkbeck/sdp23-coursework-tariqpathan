@@ -49,6 +49,6 @@ public class DivInstruction extends Instruction {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(result, source, OP_CODE);
+		return Objects.hash(label, result, source);
 	}
 }

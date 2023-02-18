@@ -48,9 +48,11 @@ public abstract class Instruction {
 		return (getLabel() == null) ? "" : getLabel() + ": ";
 	}
 
-	// TODO: What does abstract in the declaration below mean?
+	// TODO: What does abstract in the declaration below mean? Attempted
 	// abstract here means that a non-abstract (concrete) subclass that extends Instruction.java
 	// must implement the method.
+	// If the subclass extending instruction.java does not implement the method, that subclass
+	// must also be declared as abstract.
 	@Override
 	public abstract String toString();
 
@@ -58,5 +60,5 @@ public abstract class Instruction {
 
 	public abstract int hashCode();
 
-	// TODO: Make sure that subclasses also implement equals and hashCode (needed in class Machine).
+	// TODO: Make sure that subclasses also implement equals and hashCode (needed in class Machine). Done
 }

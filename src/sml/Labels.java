@@ -51,6 +51,15 @@ public final class Labels {
 	}
 
 	// TODO: Implement equals and hashCode (needed in class Machine).
+	@Override
+	public boolean equals(Object o) {
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(0);
+	}
 
 	/**
 	 * Removes the labels
