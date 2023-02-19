@@ -25,10 +25,15 @@ public class DivInstruction extends Instruction {
 	}
 
 	@Override
-	public int execute(Machine m) {
+	public int execute(Machine m) throws IllegalArgumentException {
 		int value1 = m.getRegisters().get(result);
 		int value2 = m.getRegisters().get(source);
-		m.getRegisters().set(result, value1 / value2);
+		if (value2 == 0) {
+			throw new IllegalArgumentException(
+					source.toString() + "is a dividend and cannot have a value 0"
+			);
+		} else { m.getRegisters().set(result, value1 / value2); }
+
 		return NORMAL_PROGRAM_COUNTER_UPDATE;
 	}
 
