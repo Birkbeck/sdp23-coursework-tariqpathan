@@ -12,28 +12,26 @@ import java.util.Objects;
  * @author
  */
 
-public class MovInstruction extends Instruction {
-	private final RegisterName result;
-	private final int source;
+public class OutInstruction extends Instruction {
+	private final RegisterName source;
 
-	public static final String OP_CODE = "mov";
+	public static final String OP_CODE = "out";
 
-	public MovInstruction(String label, RegisterName result, int source) {
+	public OutInstruction(String label, RegisterName source) {
 		super(label, OP_CODE);
-		this.result = result;
 		this.source = source;
 	}
 
 	@Override
 	public int execute(Machine m) {
-		int value1 = this.source;
-		m.getRegisters().set(result, value1);
+		int value1 = m.getRegisters().get(source);
+		System.out.println(source.name() + ": " + value1);
 		return NORMAL_PROGRAM_COUNTER_UPDATE;
 	}
 
 	@Override
 	public String toString() {
-		return getLabelString() + getOpcode() + " " + result + " " + source;
+		return getLabelString() + getOpcode() + " " + source;
 	}
 
 	@Override
@@ -41,9 +39,8 @@ public class MovInstruction extends Instruction {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		// fully compares fields
-		if (o instanceof MovInstruction other) {
+		if (o instanceof OutInstruction other) {
 			return Objects.equals(this.label, other.label)
-					&& Objects.equals(this.result, other.result)
 					&& Objects.equals(this.source, other.source);
 		}
 		return false;
@@ -51,6 +48,6 @@ public class MovInstruction extends Instruction {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(label, result, source);
+		return Objects.hash(label, source);
 	}
 }
