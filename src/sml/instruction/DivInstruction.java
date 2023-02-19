@@ -30,7 +30,7 @@ public class DivInstruction extends Instruction {
 		int value2 = m.getRegisters().get(source);
 		if (value2 == 0) {
 			throw new IllegalArgumentException(
-					source.toString() + "is a dividend and cannot have a value 0"
+					source.toString() + " is a dividend and cannot have a value of 0"
 			);
 		} else { m.getRegisters().set(result, value1 / value2); }
 

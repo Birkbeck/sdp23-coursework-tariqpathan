@@ -76,10 +76,11 @@ class DivInstructionTest {
     registers.set(EAX, 5);
     registers.set(EBX, 0);
     Instruction instruction = new DivInstruction(null, EAX, EBX);
-    Assertions.assertThrows(
+    Exception thrown = Assertions.assertThrows(
             IllegalArgumentException.class,
             () -> instruction.execute(machine)
     );
+    Assertions.assertEquals("EBX is a dividend and cannot have a value of 0", thrown.getMessage());
   }
 
   @Test
