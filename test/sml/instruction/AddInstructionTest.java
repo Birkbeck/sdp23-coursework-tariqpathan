@@ -24,26 +24,18 @@ class AddInstructionTest {
     machine = null;
     registers = null;
   }
-
-  @Nested
-  class AddInstructionConstructor {
-    private Instruction instruction;
-
-    @BeforeEach
-    void setUp() {
-      instruction = new AddInstruction("aLabel", EAX, EBX);
+  @Test
+  void labelValid() {
+    Instruction instruction = new AddInstruction("aLabel", EDI, EDI);
+    Assertions.assertEquals("aLabel", instruction.getLabel());
     }
 
-    @Test
-    void labelValid() {
-      Assertions.assertEquals("aLabel", instruction.getLabel());
+  @Test
+  void OPCodeValid() {
+    Instruction instruction = new AddInstruction(null, EDI, EDI);
+    Assertions.assertEquals("add", instruction.getOpcode());
     }
 
-    @Test
-    void OPCodeValid() {
-      Assertions.assertEquals("add", instruction.getOpcode());
-    }
-  }
 
   @Test
   void executeValid() {
@@ -61,6 +53,14 @@ class AddInstructionTest {
     Instruction instruction = new AddInstruction(null, EAX, EBX);
     instruction.execute(machine);
     Assertions.assertEquals(1, machine.getRegisters().get(EAX));
+  }
+
+  @Test
+  void executeValidWithSameSourceAndResultRegister() {
+    registers.set(EAX, 2);
+    Instruction instruction = new AddInstruction(null, EAX, EAX);
+    instruction.execute(machine);
+    Assertions.assertEquals(4, machine.getRegisters().get(EAX));
   }
 
   @Test
@@ -91,7 +91,7 @@ class AddInstructionTest {
   }
 
   @Nested
-  class TestTwoInstructions {
+  class TestHashCodeAndEquals {
     private Instruction instructionOne;
 
     @BeforeEach
@@ -110,7 +110,6 @@ class AddInstructionTest {
     @Test
     void equalsTrueWithSameValues() {
       Instruction instructionTwo = new AddInstruction("aLabel", EAX, EBX);
-
       Assertions.assertTrue(instructionOne.equals(instructionTwo));
       Assertions.assertTrue(instructionTwo.equals(instructionOne));
     }
@@ -118,7 +117,6 @@ class AddInstructionTest {
     @Test
     void equalsFalseWithRegisterChange() {
       Instruction instructionThree = new AddInstruction("aLabel", EAX, ECX);
-
       Assertions.assertFalse(instructionOne.equals(instructionThree));
       Assertions.assertFalse(instructionThree.equals(instructionOne));
     }
@@ -143,35 +141,35 @@ class AddInstructionTest {
     }
 
     @Test
-    void hashCodeForSameInstructionValid() {
+    void hashCodeForSameInstruction() {
       Assertions.assertEquals(instructionOne.hashCode(), instructionOne.hashCode());
     }
 
     @Test
-    void hashCodeForEqualValuesValid() {
+    void hashCodeForEqualValues() {
       Instruction instructionTwo = new AddInstruction("aLabel", EAX, EBX);
       Assertions.assertEquals(instructionOne.hashCode(), instructionTwo.hashCode());
     }
 
     @Test
-    void hashCodeNotEqualWithRegisterChangeValid() {
+    void hashCodeNotEqualWithRegisterChange() {
       Instruction instructionThree = new AddInstruction("aLabel", EAX, ECX);
       Assertions.assertNotEquals(instructionOne.hashCode(), instructionThree.hashCode());
     }
 
     @Test
-    void hashCodeNotEqualWithLabelChangeValid() {
+    void hashCodeNotEqualWithLabelChange() {
       Instruction instructionFour = new AddInstruction(null, EAX, EBX);
       Assertions.assertNotEquals(instructionOne.hashCode(), instructionFour.hashCode());
     }
 
     @Test
-    void hashCodeNotEqualWithNullValid() {
+    void hashCodeNotEqualWithNull() {
       Assertions.assertNotEquals((Integer) null, instructionOne.hashCode());
     }
 
     @Test
-    void hashCodeNotEqualWithObjectValid() {
+    void hashCodeNotEqualWithObject() {
       Object object = new Object();
       Assertions.assertNotEquals(object.hashCode(), instructionOne.hashCode());
     }

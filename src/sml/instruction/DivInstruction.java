@@ -39,6 +39,8 @@ public class DivInstruction extends Instruction {
 
 	@Override
 	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
 		if (o instanceof DivInstruction other) {
 			return Objects.equals(this.label, other.label)
 					&& Objects.equals(this.result, other.result)
