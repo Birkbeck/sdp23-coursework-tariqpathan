@@ -77,10 +77,31 @@ public final class Translator {
                 String s = scan();
                 return new DivInstruction(label, Register.valueOf(r), Register.valueOf(s));
             }
+            case JnzInstruction.OP_CODE -> {
+                String s = scan();
+                String L = scan();
+                return new JnzInstruction(label, Register.valueOf(s), L);
+            }
+            case MovInstruction.OP_CODE -> {
+                String r = scan();
+                String x = scan();
+                // TODO: Check if this try-catch is in appropriate place
+                try {
+                    int source = Integer.parseInt(x);
+                    return new MovInstruction(label, Register.valueOf(r), source);
+                } catch (NumberFormatException exc) {
+                    System.out.println(MovInstruction.OP_CODE + " " + r + " " + x
+                            + ": " + x + " could not be converted to integer");
+                }
+            }
             case MulInstruction.OP_CODE -> {
                 String r = scan();
                 String s = scan();
                 return new MulInstruction(label, Register.valueOf(r), Register.valueOf(s));
+            }
+            case OutInstruction.OP_CODE -> {
+                String s = scan();
+                return new OutInstruction(label, Register.valueOf(s));
             }
             case SubInstruction.OP_CODE -> {
                 String r = scan();
@@ -88,7 +109,7 @@ public final class Translator {
                 return new SubInstruction(label, Register.valueOf(r), Register.valueOf(s));
             }
 
-            // TODO: add code for all other types of instructions
+            // TODO: add code for all other types of instructions: Attempted
 
             // TODO: Then, replace the switch by using the Reflection API
 
