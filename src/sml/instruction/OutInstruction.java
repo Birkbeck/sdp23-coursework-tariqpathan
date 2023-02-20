@@ -24,8 +24,8 @@ public class OutInstruction extends Instruction {
 
 	@Override
 	public int execute(Machine m) {
-		int value1 = m.getRegisters().get(source);
-		System.out.println(source.name() + ": " + value1);
+		int value = m.getRegisters().get(source);
+		System.out.println(source.name() + ": " + value);
 		return NORMAL_PROGRAM_COUNTER_UPDATE;
 	}
 

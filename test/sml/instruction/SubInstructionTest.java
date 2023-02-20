@@ -103,7 +103,6 @@ class SubInstructionTest {
     registers.set(EAX, -5);
     registers.set(EBX, 6);
     Instruction instruction = new SubInstruction(null, EAX, EBX);
-    instruction.toString();
     Assertions.assertEquals("sub EAX EBX", instruction.toString());
   }
 
@@ -112,7 +111,6 @@ class SubInstructionTest {
     registers.set(ECX, 4);
     registers.set(ESI, 2);
     Instruction instruction = new SubInstruction("labelOne", ECX, ESI);
-    instruction.toString();
     Assertions.assertEquals("labelOne: sub ECX ESI", instruction.toString());
   }
 

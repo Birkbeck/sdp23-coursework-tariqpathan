@@ -88,7 +88,6 @@ class DivInstructionTest {
     registers.set(EAX, -5);
     registers.set(EBX, 6);
     Instruction instruction = new DivInstruction(null, EAX, EBX);
-    instruction.toString();
     Assertions.assertEquals("div EAX EBX", instruction.toString());
   }
 
@@ -97,7 +96,6 @@ class DivInstructionTest {
     registers.set(ECX, 4);
     registers.set(ESI, 2);
     Instruction instruction = new DivInstruction("labelOne", ECX, ESI);
-    instruction.toString();
     Assertions.assertEquals("labelOne: div ECX ESI", instruction.toString());
   }
 
