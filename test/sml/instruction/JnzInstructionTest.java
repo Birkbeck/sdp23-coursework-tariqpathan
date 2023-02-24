@@ -76,9 +76,14 @@ class JnzInstructionTest {
     String goToLabelOne;
 
     @BeforeEach
-    void setup() {
+    void setupHashCodeAndEquals() {
       String goToLabelOne = "f0";
       instructionOne = new JnzInstruction("aLabel", EAX, goToLabelOne);
+    }
+
+    @AfterEach
+    void teardownHashCodeAndEquals() {
+      instructionOne = null;
     }
 
     @Test

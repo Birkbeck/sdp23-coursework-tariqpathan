@@ -92,8 +92,13 @@ class OutInstructionTest {
     private Instruction instructionOne;
 
     @BeforeEach
-    void setup() {
+    void setupHashCodeAndEquals() {
       instructionOne = new OutInstruction("aLabel", EAX);
+    }
+
+    @AfterEach
+    void teardownHashCodeAndEquals() {
+      instructionOne = null;
     }
 
     @Test

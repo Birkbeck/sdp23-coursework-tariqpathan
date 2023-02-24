@@ -81,8 +81,13 @@ class MovInstructionTest {
     private Instruction instructionOne;
 
     @BeforeEach
-    void setup() {
+    void setupHashCodeAndEquals() {
       instructionOne = new MovInstruction("aLabel", EAX, 2);
+    }
+
+    @AfterEach
+    void teardownHashCodeAndEquals() {
+      instructionOne = null;
     }
 
     @Test
