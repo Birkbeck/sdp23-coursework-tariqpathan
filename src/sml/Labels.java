@@ -1,8 +1,11 @@
 package sml;
 
+import sml.instruction.JnzInstruction;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 // TODO: write a JavaDoc for the class
 
@@ -22,6 +25,10 @@ public final class Labels {
 	public void addLabel(String label, int address) {
 		Objects.requireNonNull(label);
 		// TODO: Add a check that there are no label duplicates.
+		if (labels.containsKey(label)) {
+			throw new IllegalArgumentException(
+				label + " already exists and has an address of " + labels.get(label));
+		}
 		labels.put(label, address);
 	}
 
@@ -46,13 +53,22 @@ public final class Labels {
 	 */
 	@Override
 	public String toString() {
-		// TODO: Implement the method using the Stream API (see also class Registers).
-		return "";
+		// TODO: Implement the method using the Stream API (see also class Registers). Attempted
+		return labels.entrySet().stream()
+				.sorted(Map.Entry.comparingByKey())
+				.map(e -> e.getKey() + ": " + e.getValue())
+				.collect(Collectors.joining(", ", "[", "]"));
 	}
 
-	// TODO: Implement equals and hashCode (needed in class Machine).
+	// TODO: Implement equals and hashCode (needed in class Machine). Check
 	@Override
 	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		// fully compares fields
+		if (o instanceof Labels other) {
+			return labels.equals(other.labels);
+		}
 		return false;
 	}
 
