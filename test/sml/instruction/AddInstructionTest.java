@@ -120,11 +120,16 @@ class AddInstructionTest {
     private Instruction instructionOne;
 
     @BeforeEach
-    void setup() {
+    void setupHashCodeAndEquals() {
       registers.set(EAX, 1);
       registers.set(EBX, 2);
       registers.set(ECX, 3);
-      instructionOne = new AddInstruction("aLabel", EAX, EBX);
+      instructionOne = new DivInstruction("aLabel", EAX, EBX);
+    }
+
+    @AfterEach
+    void teardownHashCodeAndEquals() {
+      instructionOne = null;
     }
 
     @Test
