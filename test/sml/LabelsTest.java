@@ -1,202 +1,166 @@
-package sml.instruction;
+package sml;
 
 import org.junit.jupiter.api.*;
+import sml.Labels;
 
-import sml.Instruction;
-import sml.Machine;
-import sml.Registers;
+import java.util.Collections;
 
-import static sml.Registers.Register.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-class AddInstructionTest {
-  private Machine machine;
-  private Registers registers;
+class LabelsTest {
+  private Labels labels;
 
   @BeforeEach
   void setUp() {
-    machine = new Machine(new Registers());
-    registers = machine.getRegisters();
-    //...
+    labels = new Labels();
   }
 
   @AfterEach
   void tearDown() {
-    machine = null;
-    registers = null;
+    labels.reset();
   }
   @Test
-  void labelValid() {
-    Instruction instruction = new AddInstruction("aLabel", EDI, EDI);
-    Assertions.assertEquals("aLabel", instruction.getLabel());
+  void addOneLabelValid() {
+    labels.addLabel("first", 1);
+    Assertions.assertEquals("[first -> 1]", labels.toString());
+  }
+
+  @Test
+  void addMultipleLabelsValid() {
+    for (int i = 1; i < 4; i++) {
+      labels.addLabel(String.valueOf(i), i);
     }
-
-  @Test
-  void OPCodeValid() {
-    Instruction instruction = new AddInstruction(null, EDI, EDI);
-    Assertions.assertEquals("add", instruction.getOpcode());
-    }
-
-
-  @Test
-  void executeValid() {
-    registers.set(EAX, 5);
-    registers.set(EBX, 6);
-    Instruction instruction = new AddInstruction(null, EAX, EBX);
-    instruction.execute(machine);
-    Assertions.assertEquals(11, machine.getRegisters().get(EAX));
+    String expected = "[1 -> 1, 2 -> 2, 3 -> 3]";
+    Assertions.assertEquals(expected, labels.toString());
   }
 
   @Test
-  void executeValidWithNegativeResultRegister() {
-    registers.set(EAX, -5);
-    registers.set(EBX, 6);
-    Instruction instruction = new AddInstruction(null, EAX, EBX);
-    instruction.execute(machine);
-    Assertions.assertEquals(1, machine.getRegisters().get(EAX));
+  void getAddressValidWithCorrectLabel() {
+    labels.addLabel("first", 1);
+    labels.addLabel("second", 2);
+    Assertions.assertEquals(1, labels.getAddress("first"));
+    Assertions.assertEquals(2, labels.getAddress("second"));
   }
 
   @Test
-  void executeValidWithNegativeSourceRegister() {
-    registers.set(EAX, 5);
-    registers.set(EBX, -6);
-    Instruction instruction = new AddInstruction(null, EAX, EBX);
-    instruction.execute(machine);
-    Assertions.assertEquals(-1, machine.getRegisters().get(EAX));
+  void getAddressThrowsExceptionWithIncorrectLabel() {
+    labels.addLabel("first", 1);
+    Exception thrown = Assertions.assertThrows(
+            NullPointerException.class, () -> {
+              labels.getAddress("second");
+            });
+    Assertions.assertEquals("no label exists", thrown.getMessage());
   }
 
   @Test
-  void executeValidWithBothNegativeRegisters() {
-    registers.set(EAX, -5);
-    registers.set(EBX, -6);
-    Instruction instruction = new AddInstruction(null, EAX, EBX);
-    instruction.execute(machine);
-    Assertions.assertEquals(-11, machine.getRegisters().get(EAX));
-  }
-
-  @Test
-  void executeValidWithZeroRegisterValues() {
-    registers.set(EAX, 0);
-    registers.set(EBX, 0);
-    Instruction instruction = new AddInstruction(null, EAX, EBX);
-    instruction.execute(machine);
-    Assertions.assertEquals(0, machine.getRegisters().get(EAX));
-  }
-
-  @Test
-  void executeValidWithSameSourceAndResultRegister() {
-    registers.set(EAX, 2);
-    Instruction instruction = new AddInstruction(null, EAX, EAX);
-    instruction.execute(machine);
-    Assertions.assertEquals(4, machine.getRegisters().get(EAX));
-  }
-
-  @Test
-  void toStringWithoutLabelValid() {
-    registers.set(EAX, -5);
-    registers.set(EBX, 6);
-    Instruction instruction = new AddInstruction(null, EAX, EBX);
-    Assertions.assertEquals("add EAX EBX", instruction.toString());
-  }
-
-  @Test
-  void toStringWithLabelValid() {
-    registers.set(ECX, 4);
-    registers.set(ESI, 2);
-    Instruction instruction = new AddInstruction("addOne", ECX, ESI);
-    Assertions.assertEquals("addOne: add ECX ESI", instruction.toString());
-  }
-
-  @Test
-  void returnValueValid() {
-    registers.set(EAX, 3);
-    registers.set(EBP, 2);
-    Instruction instruction = new AddInstruction(null, EAX, EBP);
-    int returnValue = instruction.execute(machine);
-    Assertions.assertEquals(-1, returnValue);
+  void toStringMethodValid() {
+    labels.addLabel("first", 1);
+    labels.addLabel("fifth", 5);
+    labels.addLabel("eighth", 8);
+    String expected = "[eighth -> 8, fifth -> 5, first -> 1]";
+    Assertions.assertEquals(expected, labels.toString());
   }
 
   @Nested
   class TestHashCodeAndEquals {
-    private Instruction instructionOne;
+    private Labels labelOne;
 
     @BeforeEach
-    void setup() {
-      registers.set(EAX, 1);
-      registers.set(EBX, 2);
-      registers.set(ECX, 3);
-      instructionOne = new AddInstruction("aLabel", EAX, EBX);
+    void setupHashCodeAndEquals() {
+      labelOne = new Labels();
+      labelOne.addLabel("first", 1);
+      labelOne.addLabel("second", 2);
+    }
+
+    @AfterEach
+    void teardownHashCodeAndEquals() {
+      labelOne.reset();
     }
 
     @Test
-    void equalsTrueWithSameInstructionObject() {
-      Assertions.assertTrue(instructionOne.equals(instructionOne));
+    void equalsTrueWithSameLabels() {
+      Assertions.assertTrue(labelOne.equals(labelOne));
     }
 
     @Test
-    void equalsTrueWithSameValues() {
-      Instruction instructionTwo = new AddInstruction("aLabel", EAX, EBX);
-      Assertions.assertTrue(instructionOne.equals(instructionTwo));
-      Assertions.assertTrue(instructionTwo.equals(instructionOne));
+    void equalsTrueWithSameLabelsAndRegisters() {
+      Labels labelTwo = new Labels();
+      labelTwo.addLabel("first", 1);
+      labelTwo.addLabel("second", 2);
+      Assertions.assertTrue(labelOne.equals(labelTwo));
+      Assertions.assertTrue(labelTwo.equals(labelOne));
     }
 
     @Test
-    void equalsFalseWithRegisterChange() {
-      Instruction instructionThree = new AddInstruction("aLabel", EAX, ECX);
-      Assertions.assertFalse(instructionOne.equals(instructionThree));
-      Assertions.assertFalse(instructionThree.equals(instructionOne));
+    void equalsFalseWithDifferentLabels() {
+      Labels labelTwo = new Labels();
+      labelTwo.addLabel("third", 1);
+      labelTwo.addLabel("fourth", 2);
+      Assertions.assertFalse(labelOne.equals(labelTwo));
+      Assertions.assertFalse(labelTwo.equals(labelOne));
     }
 
     @Test
-    void equalsFalseWithLabelChange() {
-      Instruction instructionThree = new AddInstruction("aLabel", EAX, ECX);
-      Instruction instructionFour = new AddInstruction(null, EAX, EBX);
-      Assertions.assertFalse(instructionThree.equals(instructionFour));
-      Assertions.assertFalse(instructionFour.equals(instructionThree));
+    void equalsFalseWithDifferentRegisters() {
+      Labels labelTwo = new Labels();
+      labelTwo.addLabel("first", 3);
+      labelTwo.addLabel("second", 4);
+      Assertions.assertFalse(labelOne.equals(labelTwo));
+      Assertions.assertFalse(labelTwo.equals(labelOne));
     }
 
     @Test
     void equalsFalseWithNull() {
-      Assertions.assertFalse(instructionOne.equals(null));
+      Assertions.assertFalse(labelOne.equals(null));
     }
 
     @Test
     void equalsFalseWithObject() {
       Object object = new Object();
-      Assertions.assertFalse(instructionOne.equals(object));
+      Assertions.assertFalse(labelOne.equals(object));
     }
 
     @Test
-    void hashCodeForSameInstruction() {
-      Assertions.assertEquals(instructionOne.hashCode(), instructionOne.hashCode());
+    void hashCodeEqualWithSameLabels() {
+      Assertions.assertEquals(labelOne.hashCode(), labelOne.hashCode());
     }
 
     @Test
-    void hashCodeForEqualValues() {
-      Instruction instructionTwo = new AddInstruction("aLabel", EAX, EBX);
-      Assertions.assertEquals(instructionOne.hashCode(), instructionTwo.hashCode());
+    void hashCodeEqualWithSameLabelsAndRegisters() {
+      Labels labelTwo = new Labels();
+      labelTwo.addLabel("first", 1);
+      labelTwo.addLabel("second", 2);
+      Assertions.assertEquals(labelOne.hashCode(), labelTwo.hashCode());
     }
 
     @Test
-    void hashCodeNotEqualWithRegisterChange() {
-      Instruction instructionThree = new AddInstruction("aLabel", EAX, ECX);
-      Assertions.assertNotEquals(instructionOne.hashCode(), instructionThree.hashCode());
+    void hashCodeNotEqualWithDifferentLabels() {
+      Labels labelTwo = new Labels();
+      labelTwo.addLabel("third", 1);
+      labelTwo.addLabel("fourth", 2);
+      Assertions.assertNotEquals(labelOne.hashCode(), labelTwo.hashCode());
     }
 
     @Test
-    void hashCodeNotEqualWithLabelChange() {
-      Instruction instructionFour = new AddInstruction(null, EAX, EBX);
-      Assertions.assertNotEquals(instructionOne.hashCode(), instructionFour.hashCode());
+    void hashCodeNotEqualWithDifferentRegisters() {
+      Labels labelTwo = new Labels();
+      labelTwo.addLabel("first", 3);
+      labelTwo.addLabel("second", 4);
+      Assertions.assertNotEquals(labelOne.hashCode(), labelTwo.hashCode());
     }
 
     @Test
-    void hashCodeNotEqualWithNull() {
-      Assertions.assertNotEquals((Integer) null, instructionOne.hashCode());
+    void hashCodeNotEqualWithNull(){
+      Assertions.assertNotEquals((Integer) null, labelOne.hashCode());
     }
 
     @Test
-    void hashCodeNotEqualWithObject() {
+    void hashCodeNotEqualWithObject(){
       Object object = new Object();
-      Assertions.assertNotEquals(object.hashCode(), instructionOne.hashCode());
+      Assertions.assertNotEquals(object, labelOne.hashCode());
     }
+
   }
+
+
 }

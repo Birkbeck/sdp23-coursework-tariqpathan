@@ -43,7 +43,8 @@ public final class Labels {
 
 		// TODO: Where can NullPointerException be thrown here?
 		//       A NullPointerException can be thrown when the application attempts to reference
-		//		a value that doesn't exist in memory.
+		//		a value that doesn't exist in memory. Here it will be thrown if we try to
+		//		do a labels.get(label) for a label that does not exist.
 		//       Add code to deal with non-existent labels.
 		return labels.get(label);
 	}
@@ -87,6 +88,7 @@ public final class Labels {
 		labels.clear();
 	}
 
+	//TODO: remove main method
 	public static void main(String[] args) {
 		Labels l = new Labels();
 		l.addLabel("one", 1);
