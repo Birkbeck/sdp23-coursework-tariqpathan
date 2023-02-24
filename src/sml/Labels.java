@@ -39,8 +39,11 @@ public final class Labels {
 	 * @return the address the label refers to
 	 */
 	public int getAddress(String label) {
+		if (!labels.containsKey(label)) throw new NullPointerException("no label exists");
+
 		// TODO: Where can NullPointerException be thrown here?
-		//       (Write an explanation.)
+		//       A NullPointerException can be thrown when the application attempts to reference
+		//		a value that doesn't exist in memory.
 		//       Add code to deal with non-existent labels.
 		return labels.get(label);
 	}
@@ -56,7 +59,7 @@ public final class Labels {
 		// TODO: Implement the method using the Stream API (see also class Registers). Attempted
 		return labels.entrySet().stream()
 				.sorted(Map.Entry.comparingByKey())
-				.map(e -> e.getKey() + ": " + e.getValue())
+				.map(e -> e.getKey() + " -> " + e.getValue())
 				.collect(Collectors.joining(", ", "[", "]"));
 	}
 
@@ -74,7 +77,7 @@ public final class Labels {
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(0);
+		return labels.hashCode();
 	}
 
 	/**
@@ -83,4 +86,22 @@ public final class Labels {
 	public void reset() {
 		labels.clear();
 	}
+
+	public static void main(String[] args) {
+		Labels l = new Labels();
+		l.addLabel("one", 1);
+		l.addLabel("two", 2);
+//		l.getAddress("three");
+
+		Labels m = new Labels();
+		m.addLabel("two", 1);
+		m.addLabel("one", 2);
+//		m.addLabel("one", 3);
+		Object p = new Object();
+		System.out.println("with hashmap: " + l.equals(m));
+		System.out.println("with o: " + l.equals(p));
+		System.out.println(l.toString());
+//		l.getAddress("three");
+	}
+
 }

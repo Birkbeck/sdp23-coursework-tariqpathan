@@ -27,6 +27,9 @@ public class Main {
 			System.out.println("Ending program execution.");
 
 			System.out.println("Values of registers at program termination:" + m.getRegisters() + ".");
+			// added souts
+			System.out.println("Labels at termination:" + m.getLabels() + ".");
+			System.out.println("Instructions at termination: " + m + ".");
 		}
 		catch (IOException e) {
 			System.out.println("Error reading the program from " + args[0]);

@@ -32,7 +32,8 @@ public abstract class Instruction {
 	}
 
 	public static int NORMAL_PROGRAM_COUNTER_UPDATE = -1;
-	public static int PROGRAM_TERMINATED_ERROR = 2;
+	public static int PROGRAM_TERMINATED_ERROR = 2; //TODO: remove
+	//TODO: What if incorrect arguments are entered for an instruction
 
 	/**
 	 * Executes the instruction in the given machine.
