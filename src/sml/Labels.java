@@ -69,7 +69,6 @@ public final class Labels {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		// fully compares fields
 		if (o instanceof Labels other) {
 			return labels.equals(other.labels);
 		}
@@ -93,7 +92,7 @@ public final class Labels {
 		Labels l = new Labels();
 		l.addLabel("one", 1);
 		l.addLabel("two", 2);
-//		l.getAddress("three");
+		l.getAddress(null);
 
 		Labels m = new Labels();
 		m.addLabel("two", 1);
