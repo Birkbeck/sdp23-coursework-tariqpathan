@@ -66,11 +66,14 @@ public final class Translator {
             return null;
 
         String opcode = scan();
+        //TODO: remove
+        System.out.println("Opcode: " + opcode);
+
         switch (opcode) {
             case AddInstruction.OP_CODE -> {
                 String r = scan();
                 String s = scan();
-                return new AddInstruction(label, Register.valueOf(r), Register.valueOf(s));
+                return new AddInstruction(label, getRegister(r), getRegister(s));
             }
             case DivInstruction.OP_CODE -> {
                 String r = scan();
@@ -123,7 +126,6 @@ public final class Translator {
         return null;
     }
 
-
     private String getLabel() {
         String word = scan();
         if (word.endsWith(":"))
@@ -132,6 +134,14 @@ public final class Translator {
         // undo scanning the word
         line = word + " " + line;
         return null;
+    }
+
+    private Register getRegister(String s) {
+        try {
+            return Register.valueOf(s);
+        } catch (IllegalArgumentException exc) {
+            throw new IllegalArgumentException("Register with an address of " + s + " does not exist");
+        }
     }
 
     /*
@@ -149,5 +159,12 @@ public final class Translator {
             }
 
         return line;
+    }
+    // TODO: Remove
+    public static void main(String[] args) {
+        Translator t = new Translator("anyname");
+        t.line = "add ECX EFX";
+        Instruction i1 = t.getInstruction(null);
+        System.out.println(i1.toString());
     }
 }
