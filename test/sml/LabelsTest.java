@@ -1,11 +1,6 @@
 package sml;
 
 import org.junit.jupiter.api.*;
-import sml.Labels;
-
-import java.util.Collections;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class LabelsTest {
   private Labels labels;
@@ -162,5 +157,11 @@ class LabelsTest {
 
   }
 
-
+  @Test
+  void resetValid() {
+    labels.addLabel("1", 1);
+    labels.addLabel("2", 2);
+    labels.reset();
+    Assertions.assertEquals("[]", labels.toString());
+  }
 }
