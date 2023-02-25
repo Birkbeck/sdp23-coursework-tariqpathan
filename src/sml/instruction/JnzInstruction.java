@@ -1,7 +1,6 @@
 package sml.instruction;
 
 import sml.Instruction;
-import sml.Labels;
 import sml.Machine;
 import sml.RegisterName;
 
