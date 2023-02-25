@@ -45,7 +45,6 @@ public final class Labels {
 		//       A NullPointerException can be thrown when the application attempts to reference
 		//		a value that doesn't exist in memory. Here it will be thrown if we try to
 		//		do a labels.get(label) for a label that does not exist.
-		//       Add code to deal with non-existent labels.
 		return labels.get(label);
 	}
 

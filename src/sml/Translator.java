@@ -163,7 +163,7 @@ public final class Translator {
     // TODO: Remove
     public static void main(String[] args) {
         Translator t = new Translator("anyname");
-        t.line = "add ECX EFX";
+        t.line = "mov ECX EFX";
         Instruction i1 = t.getInstruction(null);
         System.out.println(i1.toString());
     }
