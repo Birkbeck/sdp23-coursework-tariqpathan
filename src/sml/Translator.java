@@ -92,8 +92,12 @@ public final class Translator {
             Class<?>[] parameterTypes = constructor.getParameterTypes();
             //Arrays.stream(parameterTypes).forEach(System.out::println);
             Object[] constructorArgs = new Object[constructor.getParameterCount()];
-            for (int i = 0; i < constructor.getParameterCount(); i++) {
-                Class<?> c = toWrapper();
+            constructorArgs[0] = label;
+            Arrays.asList(parameterTypes).forEach(System.out::println);
+            for (int i = 1; i < constructor.getParameterCount(); i++) {
+
+            //                if (parameterTypes[i])
+//                constructorArgs[i];
             }
 
 
@@ -179,9 +183,9 @@ public final class Translator {
         }
     }
 
-    private static Class<?> toWrapper(Class<?> testClass) {
-        return PRIMITIVE_TYPE_WRAPPERS.getOrDefault(testClass, testClass);
-    }
+//    private static Class<?> toWrapper(Class<?> testClass) {
+//        return PRIMITIVE_TYPE_WRAPPERS.getOrDefault(testClass, testClass);
+//    }
 
     /*
      * Return the first word of line and remove it from line.
