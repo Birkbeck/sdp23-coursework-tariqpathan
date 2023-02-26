@@ -2,9 +2,12 @@ package sml;
 
 import sml.instruction.*;
 
+import javax.lang.model.type.PrimitiveType;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -23,6 +26,8 @@ public final class Translator {
 
     // line contains the characters in the current line that's not been processed yet
     private String line = "";
+
+    private String folderPath = "./instruction/";
 
     public Translator(String fileName) {
         this.fileName =  fileName;
@@ -68,7 +73,37 @@ public final class Translator {
         String opcode = scan();
         //TODO: remove
         System.out.println("Opcode: " + opcode);
+        // where the Instruction.OP_CODE matches the string opcode
+        //
+        // create that class
+        // load the params
+        String instructionClassName = "sml.instruction." +
+                opcode.substring(0, 1).toUpperCase() + opcode.substring(1) +
+                "Instruction";
 
+        try {
+            Class<?> instruction = Class.forName(instructionClassName);
+            if (instruction.getSuperclass() != Instruction.class) {
+                throw new IllegalArgumentException("Invalid instruction");
+            }
+
+            Constructor<?>[] constructors = instruction.getDeclaredConstructors();
+            Constructor<?> constructor = constructors[0];
+            Class<?>[] parameterTypes = constructor.getParameterTypes();
+            //Arrays.stream(parameterTypes).forEach(System.out::println);
+            Object[] constructorArgs = new Object[constructor.getParameterCount()];
+            for (int i = 0; i < constructor.getParameterCount(); i++) {
+                Class<?> c = toWrapper();
+            }
+
+
+        } catch (ClassNotFoundException exc) {
+            System.out.println(opcode + " instruction was not found -> " + instructionClassName);
+        } catch (IllegalArgumentException exc) {
+            System.out.println(exc.getMessage());
+        }
+
+        //TODO: Remove switch statement
         switch (opcode) {
             case AddInstruction.OP_CODE -> {
                 String r = scan();
@@ -142,6 +177,10 @@ public final class Translator {
         } catch (IllegalArgumentException exc) {
             throw new IllegalArgumentException("Register with an address of " + s + " does not exist");
         }
+    }
+
+    private static Class<?> toWrapper(Class<?> testClass) {
+        return PRIMITIVE_TYPE_WRAPPERS.getOrDefault(testClass, testClass);
     }
 
     /*
