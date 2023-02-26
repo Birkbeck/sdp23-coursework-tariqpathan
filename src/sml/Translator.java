@@ -95,8 +95,8 @@ public final class Translator {
             constructorArgs[0] = label;
             Arrays.asList(parameterTypes).forEach(System.out::println);
             for (int i = 1; i < constructor.getParameterCount(); i++) {
-
-            //                if (parameterTypes[i])
+                if ()
+//                if (parameterTypes[i])
 //                constructorArgs[i];
             }
 
