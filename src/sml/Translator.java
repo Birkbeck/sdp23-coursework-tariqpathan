@@ -6,10 +6,13 @@ import javax.lang.model.type.PrimitiveType;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static sml.Registers.Register;
 
@@ -71,7 +74,7 @@ public final class Translator {
             return null;
 
         String opcode = scan();
-        //TODO: remove
+        //TODO: remove println
         System.out.println("Opcode: " + opcode);
         // where the Instruction.OP_CODE matches the string opcode
         //
@@ -81,6 +84,8 @@ public final class Translator {
                 opcode.substring(0, 1).toUpperCase() + opcode.substring(1) +
                 "Instruction";
 
+
+        String lineBefore = line;
         try {
             Class<?> instruction = Class.forName(instructionClassName);
             if (instruction.getSuperclass() != Instruction.class) {
@@ -90,23 +95,39 @@ public final class Translator {
             Constructor<?>[] constructors = instruction.getDeclaredConstructors();
             Constructor<?> constructor = constructors[0];
             Class<?>[] parameterTypes = constructor.getParameterTypes();
-            //Arrays.stream(parameterTypes).forEach(System.out::println);
-            Object[] constructorArgs = new Object[constructor.getParameterCount()];
-            constructorArgs[0] = label;
-            Arrays.asList(parameterTypes).forEach(System.out::println);
-            for (int i = 1; i < constructor.getParameterCount(); i++) {
-                if ()
-//                if (parameterTypes[i])
-//                constructorArgs[i];
-            }
+            // Get args required for constructor
+            int paramCount = constructor.getParameterCount();
+            String[] stringArgs = new String[paramCount];
+            stringArgs[0] = label;
+            IntStream.range(1, paramCount).forEach(i -> stringArgs[i] = scan());
+            //TODO: remove println
+            System.out.println(Arrays.asList(stringArgs).stream().collect(Collectors.joining(", ")));
+            // stringArgs is an array of all the arguments as strings for the chosen constructor
+            // now we will convert the strings to appropriate types for the constructor
+            Object[] constructorArgs = new Object[paramCount];
 
+            IntStream.range(0, paramCount).forEach(i -> {
+                if (parameterTypes[i] == String.class) {
+                    constructorArgs[i] = stringArgs[i];
+                }
+                if (parameterTypes[i] == int.class) {
+                    constructorArgs[i] = Integer.parseInt(stringArgs[i]);
+                }
+                if (parameterTypes[i] == RegisterName.class) {
+                    constructorArgs[i] = Register.valueOf(stringArgs[i]);
+                }
+                constructorArgs[i] = null;
+            });
+            return (Instruction) constructor.newInstance(constructorArgs);
 
         } catch (ClassNotFoundException exc) {
             System.out.println(opcode + " instruction was not found -> " + instructionClassName);
         } catch (IllegalArgumentException exc) {
             System.out.println(exc.getMessage());
-        }
+        } catch (InstantiationException | InvocationTargetException | IllegalAccessException exc) {
 
+        }
+        line = lineBefore;
         //TODO: Remove switch statement
         switch (opcode) {
             case AddInstruction.OP_CODE -> {
