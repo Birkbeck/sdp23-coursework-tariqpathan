@@ -8,11 +8,13 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static sml.Registers.Register;
 
@@ -76,49 +78,24 @@ public final class Translator {
         String opcode = scan();
         //TODO: remove println
         System.out.println("Opcode: " + opcode);
-        // where the Instruction.OP_CODE matches the string opcode
-        //
-        // create that class
-        // load the params
-        String instructionClassName = "sml.instruction." +
-                opcode.substring(0, 1).toUpperCase() + opcode.substring(1) +
-                "Instruction";
+
 
 
         String lineBefore = line;
-        try {
-            Class<?> instruction = Class.forName(instructionClassName);
-            if (instruction.getSuperclass() != Instruction.class) {
-                throw new IllegalArgumentException("Invalid instruction");
-            }
+        ArrayList<String> args = new ArrayList<String>();
+        Stream.generate(this::scan).takeWhile(line -> line != "").forEach(args::add);
 
-            Constructor<?>[] constructors = instruction.getDeclaredConstructors();
-            Constructor<?> constructor = constructors[0];
-            Class<?>[] parameterTypes = constructor.getParameterTypes();
-            // Get args required for constructor
-            int paramCount = constructor.getParameterCount();
+        String[] stringArgs = args.toArray(String[]);
+        try {
+            InstructionFactory factory = InstructionFactory.getInstance();
+
             String[] stringArgs = new String[paramCount];
             stringArgs[0] = label;
             IntStream.range(1, paramCount).forEach(i -> stringArgs[i] = scan());
             //TODO: remove println
             System.out.println(Arrays.asList(stringArgs).stream().collect(Collectors.joining(", ")));
             // stringArgs is an array of all the arguments as strings for the chosen constructor
-            // now we will convert the strings to appropriate types for the constructor
-            Object[] constructorArgs = new Object[paramCount];
 
-            IntStream.range(0, paramCount).forEach(i -> {
-                if (parameterTypes[i] == String.class) {
-                    constructorArgs[i] = stringArgs[i];
-                }
-                if (parameterTypes[i] == int.class) {
-                    constructorArgs[i] = Integer.parseInt(stringArgs[i]);
-                }
-                if (parameterTypes[i] == RegisterName.class) {
-                    constructorArgs[i] = Register.valueOf(stringArgs[i]);
-                }
-                constructorArgs[i] = null;
-            });
-            return (Instruction) constructor.newInstance(constructorArgs);
 
         } catch (ClassNotFoundException exc) {
             System.out.println(opcode + " instruction was not found -> " + instructionClassName);
