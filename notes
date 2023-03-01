@@ -47,3 +47,7 @@ give message and line number for the error that was caused
 
 dont ignore erroneous code and continue
 integration tests
+
+**********
+Setter injection: object instantiated first, then fields are set
+Constructor injection: dependencies are injected into constructor <- I will use this

@@ -1,18 +1,13 @@
 package sml;
 
-import sml.instruction.*;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import sml.instructionFactory.InstructionFactory;
 
-import javax.lang.model.type.PrimitiveType;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static sml.Registers.Register;
 
@@ -74,7 +69,7 @@ public final class Translator {
             return null;
 
         String opcode = scan();
-        //TODO: remove println
+        /*//TODO: remove println
         System.out.println("Opcode: " + opcode);
         // where the Instruction.OP_CODE matches the string opcode
         //
@@ -127,62 +122,12 @@ public final class Translator {
         } catch (InstantiationException | InvocationTargetException | IllegalAccessException exc) {
 
         }
-        line = lineBefore;
-        //TODO: Remove switch statement
-        switch (opcode) {
-            case AddInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new AddInstruction(label, getRegister(r), getRegister(s));
-            }
-            case DivInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new DivInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-            case JnzInstruction.OP_CODE -> {
-                String s = scan();
-                String L = scan();
-                return new JnzInstruction(label, Register.valueOf(s), L);
-            }
-            case MovInstruction.OP_CODE -> {
-                String r = scan();
-                String x = scan();
-                // TODO: Check if this try-catch is in appropriate place
-                try {
-                    int source = Integer.parseInt(x);
-                    return new MovInstruction(label, Register.valueOf(r), source);
-                } catch (NumberFormatException exc) {
-                    System.out.println(MovInstruction.OP_CODE + " " + r + " " + x
-                            + ": " + x + " could not be converted to integer");
-                }
-            }
-            case MulInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new MulInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-            case OutInstruction.OP_CODE -> {
-                String s = scan();
-                return new OutInstruction(label, Register.valueOf(s));
-            }
-            case SubInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new SubInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
+        line = lineBefore;*/
 
-            // TODO: add code for all other types of instructions: Attempted
+        var factory = new ClassPathXmlApplicationContext("/beans.xml");
+        InstructionFactory instructionFactory = (InstructionFactory) factory.getBean("add");
+        Instruction i = instructionFactory.create(label, new String[]{"a", "b"});
 
-            // TODO: Then, replace the switch by using the Reflection API
-
-            // TODO: Next, use dependency injection to allow this machine class
-            //       to work with different sets of opcodes (different CPUs)
-
-            default -> {
-                System.out.println("Unknown instruction: " + opcode);
-            }
-        }
         return null;
     }
 

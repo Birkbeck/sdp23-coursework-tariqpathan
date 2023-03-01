@@ -2,6 +2,6 @@ package sml.instructionFactory;
 
 import sml.Instruction;
 
-interface InstructionFactory {
+public interface InstructionFactory {
     Instruction create(String label, String[] args);
 }

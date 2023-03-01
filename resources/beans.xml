@@ -20,5 +20,7 @@
     <bean id="mul" class="sml.instruction.MulInstruction"/>
     <bean id="out" class="sml.instruction.OutInstruction"/>
     <bean id="jnz" class="sml.instruction.JnzInstruction"/>
+    <bean id="registerFactory" class="sml.RegisterFactoryImpl"/>
+    <bean id="intFactory" class="sml.intFactoryImpl"/>
 
 </beans>
