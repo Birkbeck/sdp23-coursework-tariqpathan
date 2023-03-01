@@ -2,25 +2,28 @@ package sml.instructionFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import sml.RegisterName;
+import sml.helper.IntProvider;
 import sml.helper.RegisterNameProvider;
-import sml.instruction.AddInstruction;
+import sml.instruction.MovInstruction;
 
 public class MovInstructionFactory implements InstructionFactory {
 
     private final RegisterNameProvider registerNameProvider;
+    private final IntProvider intProvider;
 
-
-    public MovInstructionFactory(
-            @Autowired RegisterNameProvider registerNameProvider) {
+    @Autowired
+    public MovInstructionFactory(RegisterNameProvider registerNameProvider,
+                                 IntProvider intProvider) {
         this.registerNameProvider = registerNameProvider;
+        this.intProvider = intProvider;
     }
 
     // get Spring to link the Factory to the Instruction
     @Override
-    public AddInstruction create(String[] args) {
+    public MovInstruction create(String[] args) {
         String label = args[0];
         RegisterName result = registerNameProvider.getRegister(args[1]);
-        RegisterName source = registerNameProvider.getRegister(args[2]);
-        return new AddInstruction(label, result, source);
+        int source = intProvider.getInt(args[2]);
+        return new MovInstruction(label, result, source);
     }
 }

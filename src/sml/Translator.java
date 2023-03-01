@@ -9,8 +9,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Scanner;
 
-import static sml.Registers.Register;
-
 /**
  * This class ....
  * <p>
@@ -69,66 +67,20 @@ public final class Translator {
             return null;
 
         String opcode = scan();
-        /*//TODO: remove println
+        //TODO: remove println
         System.out.println("Opcode: " + opcode);
-        // where the Instruction.OP_CODE matches the string opcode
-        //
-        // create that class
-        // load the params
-        String instructionClassName = "sml.instruction." +
-                opcode.substring(0, 1).toUpperCase() + opcode.substring(1) +
-                "Instruction";
-
-
         String lineBefore = line;
-        try {
-            Class<?> instruction = Class.forName(instructionClassName);
-            if (instruction.getSuperclass() != Instruction.class) {
-                throw new IllegalArgumentException("Invalid instruction");
-            }
-
-            Constructor<?>[] constructors = instruction.getDeclaredConstructors();
-            Constructor<?> constructor = constructors[0];
-            Class<?>[] parameterTypes = constructor.getParameterTypes();
-            // Get args required for constructor
-            int paramCount = constructor.getParameterCount();
-            String[] stringArgs = new String[paramCount];
-            stringArgs[0] = label;
-            IntStream.range(1, paramCount).forEach(i -> stringArgs[i] = scan());
-            //TODO: remove println
-            System.out.println(Arrays.asList(stringArgs).stream().collect(Collectors.joining(", ")));
-            // stringArgs is an array of all the arguments as strings for the chosen constructor
-            // now we will convert the strings to appropriate types for the constructor
-            Object[] constructorArgs = new Object[paramCount];
-
-            IntStream.range(0, paramCount).forEach(i -> {
-                if (parameterTypes[i] == String.class) {
-                    constructorArgs[i] = stringArgs[i];
-                }
-                if (parameterTypes[i] == int.class) {
-                    constructorArgs[i] = Integer.parseInt(stringArgs[i]);
-                }
-                if (parameterTypes[i] == RegisterName.class) {
-                    constructorArgs[i] = Register.valueOf(stringArgs[i]);
-                }
-                constructorArgs[i] = null;
-            });
-            return (Instruction) constructor.newInstance(constructorArgs);
-
-        } catch (ClassNotFoundException exc) {
-            System.out.println(opcode + " instruction was not found -> " + instructionClassName);
-        } catch (IllegalArgumentException exc) {
-            System.out.println(exc.getMessage());
-        } catch (InstantiationException | InvocationTargetException | IllegalAccessException exc) {
-
-        }
-        line = lineBefore;*/
+        line = lineBefore;
 
         var factory = new ClassPathXmlApplicationContext("/beans.xml");
-        InstructionFactory instructionFactory = (InstructionFactory) factory.getBean("add");
-        String[] args2 = {"label", "EAX", "EBX"};
+        InstructionFactory instructionFactory = (InstructionFactory) factory.getBean(opcode);
+
+        String[] args2 = {"label", "EAX", "4"};
         Instruction i = instructionFactory.create(args2);
         System.out.println(i.toString());
+        String[] args3 = {"falafel", "EBX", "ECX"};
+        Instruction i2 = instructionFactory.create(args3);
+        System.out.println("i2 = " + i2.toString());
         return null;
     }
 
@@ -141,18 +93,6 @@ public final class Translator {
         line = word + " " + line;
         return null;
     }
-
-    private Register getRegister(String s) {
-        try {
-            return Register.valueOf(s);
-        } catch (IllegalArgumentException exc) {
-            throw new IllegalArgumentException("Register with an address of " + s + " does not exist");
-        }
-    }
-
-//    private static Class<?> toWrapper(Class<?> testClass) {
-//        return PRIMITIVE_TYPE_WRAPPERS.getOrDefault(testClass, testClass);
-//    }
 
     /*
      * Return the first word of line and remove it from line.
@@ -169,12 +109,5 @@ public final class Translator {
             }
 
         return line;
-    }
-    // TODO: Remove
-    public static void main(String[] args) {
-        Translator t = new Translator("anyname");
-        t.line = "mov ECX EFX";
-        Instruction i1 = t.getInstruction(null);
-        System.out.println(i1.toString());
     }
 }

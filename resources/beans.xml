@@ -13,12 +13,12 @@
     <context:annotation-config/>
 
     <!--  -->
-    <!--<bean id="jnz" class="sml.instruction.JnzInstruction"/>
-    <bean id="sub" class="sml.instruction.SubInstruction"/>
-    <bean id="div" class="sml.instruction.DivInstruction"/>
-    <bean id="mul" class="sml.instruction.MulInstruction"/>
-    <bean id="out" class="sml.instruction.OutInstruction"/> -->
-    <bean id="mov" class="sml.instruction.MovInstruction"/>
+    <!--<bean id="jnz" class="sml.instructionFactory.JnzInstruction"/>
+    <bean id="sub" class="sml.instructionFactory.SubInstructionFactory"/>
+    <bean id="div" class="sml.instructionFactory.DivInstructionFactory"/>
+    <bean id="mul" class="sml.instructionFactory.MulInstructionFactory"/>
+    <bean id="out" class="sml.instructionFactory.OutInstructionFactory"/> -->
+    <bean id="mov" class="sml.instructionFactory.MovInstructionFactory"/>
     <bean id="add" class="sml.instructionFactory.AddInstructionFactory"/>
     <bean id="registerNameProvider" class="sml.helper.RegisterNameProviderImpl"/>
     <bean id="intProvider" class="sml.helper.IntProviderImpl"/>
