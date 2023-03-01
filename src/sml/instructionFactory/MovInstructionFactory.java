@@ -20,10 +20,9 @@ public class MovInstructionFactory implements InstructionFactory {
 
     // get Spring to link the Factory to the Instruction
     @Override
-    public MovInstruction create(String[] args) {
-        String label = args[0];
-        RegisterName result = registerNameProvider.getRegister(args[1]);
-        int source = intProvider.getInt(args[2]);
+    public MovInstruction create(String label, String[] args) {
+        RegisterName result = registerNameProvider.getRegister(args[0]);
+        int source = intProvider.getInt(args[1]);
         return new MovInstruction(label, result, source);
     }
 }

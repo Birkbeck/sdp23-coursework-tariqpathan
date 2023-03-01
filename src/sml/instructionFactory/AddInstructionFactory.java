@@ -17,10 +17,9 @@ public class AddInstructionFactory implements InstructionFactory {
 
     // get Spring to link the Factory to the Instruction
     @Override
-    public AddInstruction create(String[] args) {
-        String label = args[0];
-        RegisterName result = registerNameProvider.getRegister(args[1]);
-        RegisterName source = registerNameProvider.getRegister(args[2]);
+    public AddInstruction create(String label, String[] args) {
+        RegisterName result = registerNameProvider.getRegister(args[0]);
+        RegisterName source = registerNameProvider.getRegister(args[1]);
         return new AddInstruction(label, result, source);
     }
 }

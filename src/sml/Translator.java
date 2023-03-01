@@ -67,21 +67,23 @@ public final class Translator {
             return null;
 
         String opcode = scan();
+        String[] args = new String[2];
+        args[0] = scan();
+        args[1] = scan();
         //TODO: remove println
         System.out.println("Opcode: " + opcode);
-        String lineBefore = line;
-        line = lineBefore;
+//        ArrayList<String> argsList = new ArrayList<>();
+//        while (line.length() > 1) {
+//            System.out.println("Line before: " + line);
+//            argsList.add(scan());
+//            System.out.println("Line after: " + line);
+//        }
 
         var factory = new ClassPathXmlApplicationContext("/beans.xml");
         InstructionFactory instructionFactory = (InstructionFactory) factory.getBean(opcode);
-
-        String[] args2 = {"label", "EAX", "4"};
-        Instruction i = instructionFactory.create(args2);
-        System.out.println(i.toString());
-        String[] args3 = {"falafel", "EBX", "ECX"};
-        Instruction i2 = instructionFactory.create(args3);
-        System.out.println("i2 = " + i2.toString());
-        return null;
+        Instruction i = instructionFactory.create(label, args);
+        return i;
+//        return null;
     }
 
     private String getLabel() {
@@ -109,5 +111,14 @@ public final class Translator {
             }
 
         return line;
+    }
+
+    public static void main(String[] args) {
+        Translator t = new Translator("./test-resources/test4.sml");
+        t.line = "3";
+        System.out.println(t.scan());
+        String s = "3";
+        s = s.substring(0, 1);
+        System.out.println(s);
     }
 }
