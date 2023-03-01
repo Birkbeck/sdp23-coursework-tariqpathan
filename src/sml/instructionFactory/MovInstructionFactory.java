@@ -5,12 +5,12 @@ import sml.RegisterName;
 import sml.helper.RegisterNameProvider;
 import sml.instruction.AddInstruction;
 
-public class AddInstructionFactory implements InstructionFactory {
+public class MovInstructionFactory implements InstructionFactory {
 
     private final RegisterNameProvider registerNameProvider;
 
 
-    public AddInstructionFactory(
+    public MovInstructionFactory(
             @Autowired RegisterNameProvider registerNameProvider) {
         this.registerNameProvider = registerNameProvider;
     }

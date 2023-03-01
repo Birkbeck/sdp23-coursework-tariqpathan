@@ -126,8 +126,9 @@ public final class Translator {
 
         var factory = new ClassPathXmlApplicationContext("/beans.xml");
         InstructionFactory instructionFactory = (InstructionFactory) factory.getBean("add");
-        Instruction i = instructionFactory.create(label, new String[]{"a", "b"});
-
+        String[] args2 = {"label", "EAX", "EBX"};
+        Instruction i = instructionFactory.create(args2);
+        System.out.println(i.toString());
         return null;
     }
 
