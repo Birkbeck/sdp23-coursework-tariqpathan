@@ -1,4 +1,4 @@
-package sml.helper;
+package sml.provider;
 
 public class IntProviderImpl implements IntProvider{
 

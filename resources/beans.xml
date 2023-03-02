@@ -20,7 +20,7 @@
     <bean id="out" class="sml.instructionFactory.OutInstructionFactory"/> -->
     <bean id="mov" class="sml.instructionFactory.MovInstructionFactory"/>
     <bean id="add" class="sml.instructionFactory.AddInstructionFactory"/>
-    <bean id="registerNameProvider" class="sml.helper.RegisterNameProviderImpl"/>
-    <bean id="intProvider" class="sml.helper.IntProviderImpl"/>
+    <bean id="registerNameProvider" class="sml.provider.RegisterNameProviderImpl"/>
+    <bean id="intProvider" class="sml.provider.IntProviderImpl"/>
 
 </beans>

@@ -2,7 +2,7 @@ package sml.instructionFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import sml.RegisterName;
-import sml.helper.RegisterNameProvider;
+import sml.provider.RegisterNameProvider;
 import sml.instruction.AddInstruction;
 
 public class AddInstructionFactory implements InstructionFactory {

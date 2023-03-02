@@ -2,8 +2,8 @@ package sml.instructionFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import sml.RegisterName;
-import sml.helper.IntProvider;
-import sml.helper.RegisterNameProvider;
+import sml.provider.IntProvider;
+import sml.provider.RegisterNameProvider;
 import sml.instruction.MovInstruction;
 
 public class MovInstructionFactory implements InstructionFactory {

@@ -1,4 +1,4 @@
-package sml.helper;
+package sml.provider;
 
 import org.springframework.stereotype.Component;
 import sml.RegisterName;
