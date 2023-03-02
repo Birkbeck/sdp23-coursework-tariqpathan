@@ -2,7 +2,7 @@ package sml.instructionFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import sml.RegisterName;
-import sml.instruction.JnzInstruction;
+import sml.instruction.OutInstruction;
 import sml.provider.RegisterNameProvider;
 
 // TODO: write a JavaDoc
@@ -11,19 +11,19 @@ import sml.provider.RegisterNameProvider;
  * @author Tariq Pathan
  */
 
-public class JnzInstructionFactory implements InstructionFactory {
+public class OutInstructionFactory extends InstructionFactory {
 
     private final RegisterNameProvider registerNameProvider;
 
     @Autowired
-    public JnzInstructionFactory(RegisterNameProvider registerNameProvider) {
+    public OutInstructionFactory(RegisterNameProvider registerNameProvider) {
+        super(1);
         this.registerNameProvider = registerNameProvider;
     }
 
     @Override
-    public JnzInstruction create(String label, String[] args) {
+    public OutInstruction create(String label, String[] args) {
         RegisterName source = registerNameProvider.getRegister(args[0]);
-        String goToLabel = args[1];
-        return new JnzInstruction(label, source, goToLabel);
+        return new OutInstruction(label, source);
     }
 }

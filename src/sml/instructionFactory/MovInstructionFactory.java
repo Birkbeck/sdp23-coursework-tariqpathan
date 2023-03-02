@@ -6,7 +6,7 @@ import sml.provider.IntProvider;
 import sml.provider.RegisterNameProvider;
 import sml.instruction.MovInstruction;
 
-public class MovInstructionFactory implements InstructionFactory {
+public class MovInstructionFactory extends InstructionFactory {
 
     private final RegisterNameProvider registerNameProvider;
     private final IntProvider intProvider;
@@ -14,11 +14,11 @@ public class MovInstructionFactory implements InstructionFactory {
     @Autowired
     public MovInstructionFactory(RegisterNameProvider registerNameProvider,
                                  IntProvider intProvider) {
+        super(2);
         this.registerNameProvider = registerNameProvider;
         this.intProvider = intProvider;
     }
 
-    // get Spring to link the Factory to the Instruction
     @Override
     public MovInstruction create(String label, String[] args) {
         RegisterName result = registerNameProvider.getRegister(args[0]);

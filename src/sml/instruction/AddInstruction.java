@@ -12,7 +12,7 @@ import java.util.Objects;
  * @author
  */
 
-public class SubInstruction extends Instruction {
+public class AddInstruction extends Instruction {
 	private final RegisterName result;
 	private final RegisterName source;
 

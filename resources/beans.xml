@@ -13,14 +13,15 @@
     <context:annotation-config/>
 
     <!--  -->
-    <!--<bean id="jnz" class="sml.instructionFactory.JnzInstruction"/>
-    <bean id="sub" class="sml.instructionFactory.SubInstructionFactory"/>
-    <bean id="div" class="sml.instructionFactory.DivInstructionFactory"/>
-    <bean id="mul" class="sml.instructionFactory.MulInstructionFactory"/>
-    <bean id="out" class="sml.instructionFactory.OutInstructionFactory"/> -->
-    <bean id="mov" class="sml.instructionFactory.MovInstructionFactory"/>
     <bean id="add" class="sml.instructionFactory.AddInstructionFactory"/>
-    <bean id="registerNameProvider" class="sml.provider.RegisterNameProviderImpl"/>
+    <bean id="div" class="sml.instructionFactory.DivInstructionFactory"/>
+    <bean id="jnz" class="sml.instructionFactory.JnzInstructionFactory"/>
+    <bean id="mov" class="sml.instructionFactory.MovInstructionFactory"/>
+    <bean id="mul" class="sml.instructionFactory.MulInstructionFactory"/>
+    <bean id="out" class="sml.instructionFactory.OutInstructionFactory"/>
+    <bean id="sub" class="sml.instructionFactory.SubInstructionFactory"/>
+    <!-- helper beans for creating specified constructor argument types-->
     <bean id="intProvider" class="sml.provider.IntProviderImpl"/>
+    <bean id="registerNameProvider" class="sml.provider.RegisterNameProviderImpl"/>
 
 </beans>

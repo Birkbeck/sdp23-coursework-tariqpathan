@@ -6,7 +6,6 @@ import sml.instructionFactory.InstructionFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -68,24 +67,12 @@ public final class Translator {
             return null;
 
         String opcode = scan();
-        String[] args = new String[2];
-//        args[0] = scan();
-//        args[1] = scan();
-        //TODO: remove println
-        System.out.println("Opcode: " + opcode);
-        ArrayList<String> argsList = new ArrayList<>();
-        while (!line.isEmpty()) {
-            System.out.println("Line before: " + line);
-            argsList.add(scan());
-            System.out.println("Line after: " + line);
-        }
-        args = argsList.toArray(new String[0]);
-
         var factory = new ClassPathXmlApplicationContext("/beans.xml");
         InstructionFactory instructionFactory = (InstructionFactory) factory.getBean(opcode);
-        Instruction i = instructionFactory.create(label, args);
-        return i;
-//        return null;
+        String[] args = line.trim().split("\\s+");
+        if (!instructionFactory.checkArgLength(args)) return null;
+        Instruction instruction = instructionFactory.create(label, args);
+        return instruction;
     }
 
     private String getLabel() {
@@ -113,14 +100,5 @@ public final class Translator {
             }
 
         return line;
-    }
-
-    public static void main(String[] args) {
-        Translator t = new Translator("./test-resources/test4.sml");
-        t.line = "EAX 3";
-        System.out.println(t.scan());
-        String s = "3";
-        s = s.substring(0, 1);
-        System.out.println(s);
     }
 }

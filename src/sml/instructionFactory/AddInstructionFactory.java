@@ -2,20 +2,19 @@ package sml.instructionFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import sml.RegisterName;
-import sml.provider.RegisterNameProvider;
 import sml.instruction.AddInstruction;
+import sml.provider.RegisterNameProvider;
 
-public class AddInstructionFactory implements InstructionFactory {
+public class AddInstructionFactory extends InstructionFactory {
 
     private final RegisterNameProvider registerNameProvider;
 
-
-    public AddInstructionFactory(
-            @Autowired RegisterNameProvider registerNameProvider) {
+    @Autowired
+    public AddInstructionFactory(RegisterNameProvider registerNameProvider) {
+        super(2);
         this.registerNameProvider = registerNameProvider;
     }
 
-    // get Spring to link the Factory to the Instruction
     @Override
     public AddInstruction create(String label, String[] args) {
         RegisterName result = registerNameProvider.getRegister(args[0]);
