@@ -1,7 +1,6 @@
 package sml;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import sml.instructionFactory.InstructionFactory;
 
 import java.io.File;
 import java.io.IOException;

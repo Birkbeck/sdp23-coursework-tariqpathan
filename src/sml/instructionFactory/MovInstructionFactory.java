@@ -1,6 +1,7 @@
 package sml.instructionFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import sml.InstructionFactory;
 import sml.RegisterName;
 import sml.provider.IntProvider;
 import sml.provider.RegisterNameProvider;

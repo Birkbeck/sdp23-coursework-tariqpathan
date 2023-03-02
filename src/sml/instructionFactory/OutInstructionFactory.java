@@ -1,6 +1,7 @@
 package sml.instructionFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import sml.InstructionFactory;
 import sml.RegisterName;
 import sml.instruction.OutInstruction;
 import sml.provider.RegisterNameProvider;
@@ -14,10 +15,12 @@ import sml.provider.RegisterNameProvider;
 public class OutInstructionFactory extends InstructionFactory {
 
     private final RegisterNameProvider registerNameProvider;
+    private static final int ARGS_REQUIRED = 1;
+
 
     @Autowired
     public OutInstructionFactory(RegisterNameProvider registerNameProvider) {
-        super(1);
+        super(ARGS_REQUIRED);
         this.registerNameProvider = registerNameProvider;
     }
 

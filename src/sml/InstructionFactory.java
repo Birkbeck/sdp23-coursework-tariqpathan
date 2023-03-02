@@ -1,18 +1,16 @@
-package sml.instructionFactory;
-
-import sml.Instruction;
+package sml;
 
 public abstract class InstructionFactory {
 
-    private final int ARGS_REQUIRED;
+    private final int argsRequired;
 
     public InstructionFactory(int argsRequired) {
-        this.ARGS_REQUIRED = argsRequired;
+        this.argsRequired = argsRequired;
     }
 
     public abstract Instruction create(String label, String[] args);
 
     public boolean checkArgLength(String[] args) {
-        return (this.ARGS_REQUIRED == args.length);
+        return (this.argsRequired == args.length);
     }
 }
