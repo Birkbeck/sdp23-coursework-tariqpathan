@@ -10,7 +10,7 @@ public abstract class InstructionFactory {
 
     public abstract Instruction create(String label, String[] args);
 
-    public boolean checkArgLength(String[] args) {
-        return (this.argsRequired == args.length);
+    public int getArgLengthRequired() {
+        return this.argsRequired;
     }
 }

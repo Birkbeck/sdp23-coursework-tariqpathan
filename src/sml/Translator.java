@@ -78,8 +78,9 @@ public final class Translator {
         try {
             InstructionFactory instructionFactory = (InstructionFactory) factory.getBean(opcode);
             String[] args = line.trim().split("\\s+");
-            if (!instructionFactory.checkArgLength(args)) {
-                throw new IllegalArgumentException("Invalid number of arguments for instruction type");
+            if (instructionFactory.getArgLengthRequired() != args.length) {
+                throw new IllegalArgumentException(instructionFactory.getArgLengthRequired()
+                        + " arguments required after opcode, but " + args.length + " provided");
             }
             Instruction instruction = instructionFactory.create(label, args);
             return instruction;

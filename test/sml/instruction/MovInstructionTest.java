@@ -32,7 +32,7 @@ class MovInstructionTest {
   @Test
   void OPCodeValid() {
     Instruction instruction = new MovInstruction(null, EDI, 1);
-    Assertions.assertEquals("mov", instruction.getOpcode());
+    Assertions.assertEquals("mov.sml", instruction.getOpcode());
     }
 
 
@@ -60,13 +60,13 @@ class MovInstructionTest {
   @Test
   void toStringWithoutLabelValid() {
     Instruction instruction = new MovInstruction(null, EAX, 2);
-    Assertions.assertEquals("mov EAX 2", instruction.toString());
+    Assertions.assertEquals("mov.sml EAX 2", instruction.toString());
   }
 
   @Test
   void toStringWithLabelValid() {
     Instruction instruction = new MovInstruction("labelOne", ECX, 2);
-    Assertions.assertEquals("labelOne: mov ECX 2", instruction.toString());
+    Assertions.assertEquals("labelOne: mov.sml ECX 2", instruction.toString());
   }
 
   @Test
