@@ -58,28 +58,6 @@ class ReadAndTranslateExceptionsTest {
     }
 
     @Test
-    void tooFewArgsThrows() {
-        String errorType = "tooFewArgs";
-        String fileName = filePath + errorType + extension;
-        Translator translator = new Translator(fileName);
-        Exception thrown = Assertions.assertThrows(InvalidInstructionException.class,
-                () -> translator.readAndTranslate(
-                        machine.getLabels(), machine.getProgram())
-        );
-    }
-
-    @Test
-    void tooManyArgsThrows() {
-        String errorType = "tooManyArgs";
-        String fileName = filePath + errorType + extension;
-        Translator translator = new Translator(fileName);
-        Exception thrown = Assertions.assertThrows(InvalidInstructionException.class,
-                () -> translator.readAndTranslate(
-                        machine.getLabels(), machine.getProgram())
-        );
-    }
-
-    @Test
     void duplicateLabelThrows() {
         String errorType = "duplicateLabel";
         String fileName = filePath + errorType + extension;

@@ -58,6 +58,8 @@ public final class Translator {
         } catch (IllegalArgumentException exc) {
             int index = labels.getAddress(exc.getMessage());
             throw new DuplicateLabelException(exc.getMessage(), program, index);
+        } catch (NullPointerException exc) {
+            throw new InvalidInstructionException(exc, null, null, line);
         }
     }
 
@@ -75,54 +77,56 @@ public final class Translator {
             return null;
 
         String opcode = scan();
-        switch (opcode) {
-            case AddInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new AddInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-            case DivInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new DivInstruction(label, Register.valueOf(r), Registers.Register.valueOf(s));
-            }
-            case JnzInstruction.OP_CODE -> {
-                String s = scan();
-                String L = scan();
-                return new JnzInstruction(label, Register.valueOf(s), L);
-            }
-            case MovInstruction.OP_CODE -> {
-                String r = scan();
-                String x = scan();
-                // TODO: Check if this try-catch is in appropriate place
-                try {
-                    int source = Integer.parseInt(x);
-                    return new MovInstruction(label, Register.valueOf(r), source);
-                } catch (NumberFormatException exc) {
-                    System.out.println(MovInstruction.OP_CODE + " " + r + " " + x
-                            + ": " + x + " could not be converted to integer");
+        try{
+            switch (opcode) {
+                case AddInstruction.OP_CODE -> {
+                    String r = scan();
+                    String s = scan();
+                    return new AddInstruction(label, Register.valueOf(r), Register.valueOf(s));
+                }
+                case DivInstruction.OP_CODE -> {
+                    String r = scan();
+                    String s = scan();
+                    return new DivInstruction(label, Register.valueOf(r), Registers.Register.valueOf(s));
+                }
+                case JnzInstruction.OP_CODE -> {
+                    String s = scan();
+                    String L = scan();
+                    return new JnzInstruction(label, Register.valueOf(s), L);
+                }
+                case MovInstruction.OP_CODE -> {
+                    String r = scan();
+                    String x = scan();
+                    try {
+                        int source = Integer.parseInt(x);
+                        return new MovInstruction(label, Register.valueOf(r), source);
+                    } catch (NumberFormatException exc) {
+                        throw new InvalidInstructionException(exc, label, opcode, line);
+                    }
+                }
+                case MulInstruction.OP_CODE -> {
+                    String r = scan();
+                    String s = scan();
+                    return new MulInstruction(label, Register.valueOf(r), Register.valueOf(s));
+                }
+                case OutInstruction.OP_CODE -> {
+                    String s = scan();
+                    return new OutInstruction(label, Register.valueOf(s));
+                }
+                case SubInstruction.OP_CODE -> {
+                    String r = scan();
+                    String s = scan();
+                    return new SubInstruction(label, Register.valueOf(r), Register.valueOf(s));
+                }
+
+                default -> {
+                    throw new InvalidInstructionException(
+                            new IllegalArgumentException("Unknown instruction"), label, opcode, line);
                 }
             }
-            case MulInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new MulInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-            case OutInstruction.OP_CODE -> {
-                String s = scan();
-                return new OutInstruction(label, Register.valueOf(s));
-            }
-            case SubInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new SubInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-
-            default -> {
-                System.out.println("Unknown instruction: " + opcode);
-            }
+        } catch (IllegalArgumentException exc) {
+            throw new InvalidInstructionException(exc, label, opcode, line);
         }
-        return null;
     }
 
     private String getLabel() {
@@ -150,5 +154,11 @@ public final class Translator {
             }
 
         return line;
+    }
+
+    public static void main(String[] args) throws InvalidInstructionException {
+        Translator t = new Translator("xyz");
+        t.line = "add E0X EBX";
+        Instruction i = t.getInstruction(null);
     }
 }
