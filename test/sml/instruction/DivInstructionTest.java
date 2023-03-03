@@ -77,10 +77,10 @@ class DivInstructionTest {
     registers.set(EBX, 0);
     Instruction instruction = new DivInstruction(null, EAX, EBX);
     Exception thrown = Assertions.assertThrows(
-            IllegalArgumentException.class,
+            ArithmeticException.class,
             () -> instruction.execute(machine)
     );
-    Assertions.assertEquals("Dividend (EBX) has a value of 0", thrown.getMessage());
+    Assertions.assertEquals("/ by zero", thrown.getMessage());
   }
 
   @Test

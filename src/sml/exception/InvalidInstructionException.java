@@ -9,7 +9,7 @@ public class InvalidInstructionException extends Exception {
         String instruction = (label != null) ? label : "" + opcode + " " + line.trim();
         this.message = "An error was generated when trying to create an instruction.\n"
                 + "The following instruction: " + instruction + "\n"
-                + "caused this error: " + cause.getMessage() + "\n"
+                + "caused: " + cause + "\n"
                 + "Program terminated with error.";
     }
 

@@ -123,7 +123,7 @@ class MulInstructionTest {
       registers.set(EAX, 1);
       registers.set(EBX, 2);
       registers.set(ECX, 3);
-      instructionOne = new DivInstruction("aLabel", EAX, EBX);
+      instructionOne = new MulInstruction("aLabel", EAX, EBX);
     }
 
     @AfterEach

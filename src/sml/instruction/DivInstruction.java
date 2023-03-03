@@ -28,13 +28,12 @@ public class DivInstruction extends Instruction {
 	public int execute(Machine m) throws IllegalArgumentException {
 		int value1 = m.getRegisters().get(result);
 		int value2 = m.getRegisters().get(source);
-		if (value2 == 0) {
-			throw new IllegalArgumentException(
-					"Dividend (" + source.toString() + ") has a value of 0"
-			);
-		} else { m.getRegisters().set(result, value1 / value2); }
-
-		return NORMAL_PROGRAM_COUNTER_UPDATE;
+		try {
+			m.getRegisters().set(result, value1 / value2);
+			return NORMAL_PROGRAM_COUNTER_UPDATE;
+		} catch (ArithmeticException exc) {
+			throw exc;
+		}
 	}
 
 	@Override

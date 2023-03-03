@@ -115,6 +115,7 @@ public final class Translator {
         return line;
     }
 
+    //TODO: remove main method
     public static void main(String[] args) {
         Translator t = new Translator("abc");
         String[] errors = {

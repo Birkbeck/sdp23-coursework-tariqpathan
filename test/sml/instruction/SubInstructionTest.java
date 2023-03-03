@@ -132,7 +132,7 @@ class SubInstructionTest {
       registers.set(EAX, 1);
       registers.set(EBX, 2);
       registers.set(ECX, 3);
-      instructionOne = new DivInstruction("aLabel", EAX, EBX);
+      instructionOne = new SubInstruction("aLabel", EAX, EBX);
     }
 
     @AfterEach

@@ -91,6 +91,17 @@ class AddInstructionTest {
   }
 
   @Test
+  void executeArithmeticException() {
+    registers.set(EAX, Integer.MAX_VALUE);
+    registers.set(EBX, 1);
+    Instruction instruction = new AddInstruction(null, EAX, EBX);
+    Exception thrown = Assertions.assertThrows(
+            ArithmeticException.class,
+            () -> instruction.execute(machine)
+    );
+  }
+
+  @Test
   void toStringWithoutLabelValid() {
     registers.set(EAX, -5);
     registers.set(EBX, 6);
@@ -124,7 +135,7 @@ class AddInstructionTest {
       registers.set(EAX, 1);
       registers.set(EBX, 2);
       registers.set(ECX, 3);
-      instructionOne = new DivInstruction("aLabel", EAX, EBX);
+      instructionOne = new AddInstruction("aLabel", EAX, EBX);
     }
 
     @AfterEach

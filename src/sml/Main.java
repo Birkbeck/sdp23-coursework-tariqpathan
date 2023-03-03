@@ -43,5 +43,9 @@ public class Main {
 		catch (DuplicateLabelException e) {
 			System.out.println(e.getMessage());
 		}
+		catch (ArithmeticException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 }
