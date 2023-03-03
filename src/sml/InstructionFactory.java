@@ -1,40 +1,97 @@
 package sml;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.stream.IntStream;
+
 /**
- * Represents an abstract instruction factory for InstructionFactory subclasses.
- * Subclasses must have the same name as the instruction they create, followed by Factory.
- * e.g "XyzInstruction" is made by "XyzInstructionFactory"
- * This also requires a bean with the id as "xyz" in the "/resources/beans.xml" file.
+ * Represents an instruction factory for creating Instructions using reflection API.
+ * Appropriate class names for instructions are found via opcode.
  * The opcode for XyzInstruction would also be xyz and must be unique.
- *
- * argRequired method was included as this number would be decided by the create method,
- * which the factory is responsible for.
  *
  * @author Tariq Pathan
  */
-public abstract class InstructionFactory {
 
-    private final int argsRequired;
+
+public class InstructionFactory {
+
+    private static final InstructionFactory instance = new InstructionFactory();
 
     /**
-     * Constructor: number of Strings in the args array that are required for the create method.
-     * This number does not include the label.
-     * @param argsRequired int required for length of args array
+     * Gets the instance of the instruction factory, of which there should only be one.
      */
-    public InstructionFactory(int argsRequired) {
-        this.argsRequired = argsRequired;
+    public static InstructionFactory getInstance() {
+        return instance;
+    }
+
+    private String createClassName(String opcode) {
+        String packageAddress = "sml.instruction";
+        String capitalisedOpcode = opcode.substring(0, 1).toUpperCase() + opcode.substring(1);
+        String superClassName = "Instruction";
+        return packageAddress + capitalisedOpcode + superClassName;
+    }
+
+    private Constructor getConstructor(String instructionClassName) throws
+            ClassNotFoundException, NoSuchMethodException{
+
+        Class<?> instruction = Class.forName(instructionClassName);
+        if (instruction.getSuperclass() != Instruction.class) {
+            throw new IllegalArgumentException("Invalid opcode");
+        }
+        Constructor constructor = instruction.getDeclaredConstructor();
+        return constructor;
+    }
+
+    private Object[] getConstructorArgs(Constructor constructor, String label, String[] stringArgs)
+    throws IllegalArgumentException{
+        Class<?>[] parameterTypes = constructor.getParameterTypes();
+        int paramCount = constructor.getParameterCount();
+        if (paramCount - 1 != stringArgs.length)
+            throw new IllegalArgumentException(paramCount - 1 + " arguments required, "
+                    + stringArgs.length + " provided after opcode");
+
+        // array of arguments to be passed to constructor
+        Object[] constructorArgs = new Object[paramCount];
+        constructorArgs[0] = label;
+        // convert the strings to appropriate types for the constructor
+        IntStream.range(1, paramCount).forEach(i -> {
+            if (parameterTypes[i] == String.class) {
+                constructorArgs[i] = stringArgs[i];
+            }
+            if (parameterTypes[i] == int.class) {
+                constructorArgs[i] = Integer.parseInt(stringArgs[i]);
+            }
+            if (parameterTypes[i] == RegisterName.class) {
+                constructorArgs[i] = Registers.Register.valueOf(stringArgs[i]);
+            }
+            constructorArgs[i] = null;
+        });
+        return constructorArgs;
     }
 
     /**
      *
-     * @param label (can be null)
-     * @param args Array of strings that will be converted to the appropriate type by the factory
-     *             create method
-     * @return Instruction
+     * @param opcode required String for operation
+     * @param label (optional) String for label
+     * @param args An array of Strings to be converted, must match the instruction constructors parameter count - 1
+     * @return an instruction of the opcode type
+     * @throws ClassNotFoundException if the instruction class name is not found
+     * @throws NoSuchMethodException if no constructor exists for instruction class
+     * @throws InvocationTargetException when constructor is called
+     * @throws InstantiationException when the instruction cannot be instantiated
+     * @throws IllegalAccessException if trying to set fields that are not accessible
+     * @throws IllegalArgumentException if the args array doesn't match parameterCount - 1 and if the Strings in
+     *      * the args array cannot be converted to the required type
      */
-    public abstract Instruction create(String label, String[] args);
+    public Instruction create(String opcode, String label, String[] args) throws
+            ClassNotFoundException, NoSuchMethodException, InvocationTargetException,
+            InstantiationException, IllegalAccessException, IllegalArgumentException {
 
-    public int getArgLengthRequired() {
-        return this.argsRequired;
+        String className = createClassName(opcode);
+        Constructor constructor = getConstructor(className);
+        Object[] constructorArgs = getConstructorArgs(constructor, label, args);
+        return (Instruction) constructor.newInstance(constructorArgs);
     }
+
 }
+

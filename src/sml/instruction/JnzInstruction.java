@@ -42,7 +42,7 @@ public class JnzInstruction extends Instruction {
 	 * @param m The instance of the machine where the instruction is executed
 	 * @return int NORMAL_PROGRAM_COUNTER_UPDATE if the source value is 0
 	 * else, the program counter value for a valid label is returned
-	 * @Exception throws NullPointerException if a valid address is not found for a label.
+	 * @throws NullPointerException if a valid address is not found for a label.
 	 */
 	@Override
 	public int execute(Machine m) throws NullPointerException {

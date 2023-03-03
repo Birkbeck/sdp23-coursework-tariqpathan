@@ -1,12 +1,11 @@
 package sml;
 
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import sml.exception.DuplicateLabelException;
 import sml.exception.InvalidInstructionException;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Scanner;
@@ -74,23 +73,17 @@ public final class Translator {
             return null;
 
         String opcode = scan();
-        var factory = new ClassPathXmlApplicationContext("/beans.xml");
+        String[] args = line.trim().split("\\s+");
+
         try {
-            // get correct instruction factory
-            InstructionFactory instructionFactory = (InstructionFactory) factory.getBean(opcode);
-
-            // check instruction format matches factory requirement before creating
-            String[] args = line.trim().split("\\s+");
-            if (instructionFactory.getArgLengthRequired() != args.length) {
-                throw new IllegalArgumentException(instructionFactory.getArgLengthRequired()
-                        + " arguments required after opcode, but " + args.length + " provided");
-            }
-
-            Instruction instruction = instructionFactory.create(label, args);
+            InstructionFactory instructionFactory = InstructionFactory.getInstance();
+            Instruction instruction = instructionFactory.create(opcode, label, args);
             return instruction;
-        } catch (NoSuchBeanDefinitionException | IllegalArgumentException exc) {
+        } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException |
+                InstantiationException | IllegalAccessException| IllegalArgumentException exc) {
             throw new InvalidInstructionException(exc, label, opcode, line);
         }
+
     }
 
     private String getLabel() {
