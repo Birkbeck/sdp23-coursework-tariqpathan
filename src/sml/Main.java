@@ -29,11 +29,7 @@ public class Main {
 			m.execute();
 			System.out.println("Ending program execution.");
 
-			System.out.println("Values of registers at program termination:" + m.getRegisters() + ".");
-			//TODO: remove souts
-			// added souts
-			System.out.println("Labels at termination:" + m.getLabels() + ".");
-			System.out.println("Instructions at termination: " + m + ".");
+			System.out.println("Values of registers at program termination: " + m.getRegisters() + ".");
 		}
 		catch (IOException e) {
 			System.out.println("Error reading the program from " + args[0]);
