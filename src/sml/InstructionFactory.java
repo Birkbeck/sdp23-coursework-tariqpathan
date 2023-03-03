@@ -2,6 +2,8 @@ package sml;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.stream.IntStream;
 
 /**
@@ -13,18 +15,15 @@ import java.util.stream.IntStream;
  *
  * @author Tariq Pathan
  */
-
-
 public class InstructionFactory {
 
     private static final InstructionFactory INSTANCE = new InstructionFactory();
 
+    private InstructionFactory() {}
+
     /**
      * Gets the INSTANCE of the instruction factory, of which there should only be one.
      */
-    private InstructionFactory() {
-    }
-
     public static InstructionFactory getInstance() {
         return INSTANCE;
     }
@@ -55,21 +54,26 @@ public class InstructionFactory {
             throw new IllegalArgumentException(paramCount - 1 + " arguments required, "
                     + stringArgs.length + " provided after opcode");
 
+        // create an arraylist with all the constructor arguments in string format
+        ArrayList<String> argsList = new ArrayList<>(Arrays.asList(stringArgs));
+        argsList.add(0, label);
+        System.out.println(argsList);;
+
         // array of arguments to be passed to constructor
         Object[] constructorArgs = new Object[paramCount];
-        constructorArgs[0] = label;
+
         // convert the strings to appropriate types for the constructor
-        IntStream.range(1, paramCount).forEach(i -> {
+        IntStream.range(0, paramCount).forEach(i -> {
             if (parameterTypes[i] == String.class) {
-                constructorArgs[i] = stringArgs[i];
+                constructorArgs[i] = argsList.get(i);
             }
-            if (parameterTypes[i] == int.class) {
-                constructorArgs[i] = Integer.parseInt(stringArgs[i]);
+            else if (parameterTypes[i] == int.class) {
+                constructorArgs[i] = Integer.parseInt(argsList.get(i));
             }
-            if (parameterTypes[i] == RegisterName.class) {
-                constructorArgs[i] = Registers.Register.valueOf(stringArgs[i]);
+            else if (parameterTypes[i] == RegisterName.class) {
+                constructorArgs[i] = Registers.Register.valueOf(argsList.get(i));
             }
-            constructorArgs[i] = null;
+            else constructorArgs[i] = null;
         });
         return constructorArgs;
     }
