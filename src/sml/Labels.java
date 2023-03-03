@@ -5,11 +5,15 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-// TODO: write a JavaDoc for the class
-
 /**
+ * Used to lookup the program index for a label.
+ * The address corresponds to the index for that instruction, stored in the program field of a machine instance.
+ * This is required for jumping instructions.
  *
- * @author ...
+ * Notes: Labels are checked for uniqueness and cannot be null.
+ * Labels cannot be checked if they refer to a valid program index - this is done at execution time.
+ *
+ * @author Tariq Pathan
  */
 public final class Labels {
 	private final Map<String, Integer> labels = new HashMap<>();
@@ -18,7 +22,8 @@ public final class Labels {
 	 * Adds a label with the associated address to the map.
 	 *
 	 * @param label the label
-	 * @param address the address the label refers to
+	 * @param address the address the label refers to in the program ArrayList of Instructions.
+	 * @Exception IllegalArgumentException thrown if label is not unique
 	 */
 	public void addLabel(String label, int address) throws IllegalArgumentException{
 		Objects.requireNonNull(label);
@@ -32,7 +37,8 @@ public final class Labels {
 	 * Returns the address associated with the label.
 	 *
 	 * @param label the label
-	 * @return the address the label refers to
+	 * @return the address the label refers to, to be looked up in program ArrayList
+	 * @Exception NullPointerException if a matching key is not found.
 	 */
 	public int getAddress(String label) {
 		if (!labels.containsKey(label)) throw new NullPointerException("no label exists");
