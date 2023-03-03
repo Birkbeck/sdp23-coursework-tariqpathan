@@ -3,9 +3,10 @@ package sml;
 // TODO: write a JavaDoc for the class
 
 /**
- * Represents an abstract instruction.
+ * Represents an abstract instruction for Instruction subclasses.
+ * Subclasses must be named OpcodeInstruction, where Opcode is a 3-character opcode.
  *
- * @author ...
+ * @author Tariq Pathan
  */
 public abstract class Instruction {
 	protected final String label;
@@ -16,7 +17,7 @@ public abstract class Instruction {
 	 * (opcode must be an operation of the language)
 	 *
 	 * @param label optional label (can be null)
-	 * @param opcode operation name
+	 * @param opcode operation name, must be lowercase and 3 characters
 	 */
 	public Instruction(String label, String opcode) {
 		this.label = label;
@@ -44,21 +45,29 @@ public abstract class Instruction {
 
 	public abstract int execute(Machine machine);
 
+	/**
+	 * Returns the label for an instruction, if it exists
+	 *
+	 * @return empty String if a label is null or the label name followed by a colon
+	 */
+
 	protected String getLabelString() {
 		return (getLabel() == null) ? "" : getLabel() + ": ";
 	}
 
-	// TODO: What does abstract in the declaration below mean? Attempted
+	// TODO: What does abstract in the declaration below mean?
 	// abstract here means that a non-abstract (concrete) subclass that extends Instruction.java
 	// must implement the method.
 	// If the subclass extending instruction.java does not implement the method, that subclass
 	// must also be declared as abstract.
+
 	@Override
 	public abstract String toString();
 
+	@Override
 	public abstract boolean equals(Object obj);
 
+	@Override
 	public abstract int hashCode();
 
-	// TODO: Make sure that subclasses also implement equals and hashCode (needed in class Machine). Done
 }
