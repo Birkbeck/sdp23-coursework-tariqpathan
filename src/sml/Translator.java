@@ -2,13 +2,15 @@ package sml;
 
 import sml.exception.DuplicateLabelException;
 import sml.exception.InvalidInstructionException;
+import sml.instruction.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Scanner;
+
+import static sml.Registers.Register;
 
 /**
  * This class translates an sml file into a list of instructions that are called
@@ -73,17 +75,54 @@ public final class Translator {
             return null;
 
         String opcode = scan();
-        String[] args = line.trim().split("\\s+");
+        switch (opcode) {
+            case AddInstruction.OP_CODE -> {
+                String r = scan();
+                String s = scan();
+                return new AddInstruction(label, Register.valueOf(r), Register.valueOf(s));
+            }
+            case DivInstruction.OP_CODE -> {
+                String r = scan();
+                String s = scan();
+                return new DivInstruction(label, Register.valueOf(r), Registers.Register.valueOf(s));
+            }
+            case JnzInstruction.OP_CODE -> {
+                String s = scan();
+                String L = scan();
+                return new JnzInstruction(label, Register.valueOf(s), L);
+            }
+            case MovInstruction.OP_CODE -> {
+                String r = scan();
+                String x = scan();
+                // TODO: Check if this try-catch is in appropriate place
+                try {
+                    int source = Integer.parseInt(x);
+                    return new MovInstruction(label, Register.valueOf(r), source);
+                } catch (NumberFormatException exc) {
+                    System.out.println(MovInstruction.OP_CODE + " " + r + " " + x
+                            + ": " + x + " could not be converted to integer");
+                }
+            }
+            case MulInstruction.OP_CODE -> {
+                String r = scan();
+                String s = scan();
+                return new MulInstruction(label, Register.valueOf(r), Register.valueOf(s));
+            }
+            case OutInstruction.OP_CODE -> {
+                String s = scan();
+                return new OutInstruction(label, Register.valueOf(s));
+            }
+            case SubInstruction.OP_CODE -> {
+                String r = scan();
+                String s = scan();
+                return new SubInstruction(label, Register.valueOf(r), Register.valueOf(s));
+            }
 
-        try {
-            InstructionFactory instructionFactory = InstructionFactory.getInstance();
-            Instruction instruction = instructionFactory.create(opcode, label, args);
-            return instruction;
-        } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException |
-                InstantiationException | IllegalAccessException| IllegalArgumentException exc) {
-            throw new InvalidInstructionException(exc, label, opcode, line);
+            default -> {
+                System.out.println("Unknown instruction: " + opcode);
+            }
         }
-
+        return null;
     }
 
     private String getLabel() {
