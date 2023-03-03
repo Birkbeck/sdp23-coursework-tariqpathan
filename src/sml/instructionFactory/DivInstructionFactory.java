@@ -6,11 +6,21 @@ import sml.RegisterName;
 import sml.instruction.DivInstruction;
 import sml.provider.RegisterNameProvider;
 
+/**
+ * Creates a DivInstruction, with the RegisterNames added via the RegisterNameProvider
+ * which is injected and converts a String to an appropriate RegisterName
+ *
+ * @author Tariq Pathan
+ */
 public class DivInstructionFactory extends InstructionFactory {
 
     private final RegisterNameProvider registerNameProvider;
     private static final int ARGS_REQUIRED = 2;
 
+    /**
+     * Constructor: Providers that help to convert the Strings to appropriate types
+     * @param registerNameProvider set in the /resources/beans.xml file
+     */
     @Autowired
     public DivInstructionFactory(RegisterNameProvider registerNameProvider) {
         super(ARGS_REQUIRED);

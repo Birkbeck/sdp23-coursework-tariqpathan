@@ -7,11 +7,23 @@ import sml.provider.IntProvider;
 import sml.provider.RegisterNameProvider;
 import sml.instruction.MovInstruction;
 
+/**
+ * Creates a MovInstruction, with the RegisterNames added via the RegisterNameProvider
+ * which is injected and converts a String to an appropriate RegisterName
+ * Int values converted via an IntProvider
+ *
+ * @author Tariq Pathan
+ */
 public class MovInstructionFactory extends InstructionFactory {
 
     private final RegisterNameProvider registerNameProvider;
     private final IntProvider intProvider;
 
+    /**
+     * Constructor: Providers that help to convert the Strings to appropriate types
+     * @param registerNameProvider set in the /resources/beans.xml file
+     * @param intProvider set in the /resources/beans.xml file
+     */
     @Autowired
     public MovInstructionFactory(RegisterNameProvider registerNameProvider,
                                  IntProvider intProvider) {

@@ -6,18 +6,21 @@ import sml.RegisterName;
 import sml.instruction.OutInstruction;
 import sml.provider.RegisterNameProvider;
 
-// TODO: write a JavaDoc
-
 /**
+ * Creates an OutInstruction, with the RegisterNames added via the RegisterNameProvider
+ * which is injected and converts a String to an appropriate RegisterName
+ *
  * @author Tariq Pathan
  */
-
 public class OutInstructionFactory extends InstructionFactory {
 
     private final RegisterNameProvider registerNameProvider;
     private static final int ARGS_REQUIRED = 1;
 
-
+    /**
+     * Constructor: Providers that help to convert the Strings to appropriate types
+     * @param registerNameProvider set in the /resources/beans.xml file
+     */
     @Autowired
     public OutInstructionFactory(RegisterNameProvider registerNameProvider) {
         super(ARGS_REQUIRED);

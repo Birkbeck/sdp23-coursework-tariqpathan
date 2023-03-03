@@ -6,17 +6,21 @@ import sml.RegisterName;
 import sml.instruction.JnzInstruction;
 import sml.provider.RegisterNameProvider;
 
-// TODO: write a JavaDoc
-
 /**
+ * Creates a JnzInstruction, with the RegisterNames added via the RegisterNameProvider
+ * which is injected and converts a String to an appropriate RegisterName
+ *
  * @author Tariq Pathan
  */
-
 public class JnzInstructionFactory extends InstructionFactory {
 
     private final RegisterNameProvider registerNameProvider;
     private static final int ARGS_REQUIRED = 2;
 
+    /**
+     * Constructor: Providers that help to convert the Strings to appropriate types
+     * @param registerNameProvider set in the /resources/beans.xml file
+     */
     @Autowired
     public JnzInstructionFactory(RegisterNameProvider registerNameProvider) {
         super(ARGS_REQUIRED);
