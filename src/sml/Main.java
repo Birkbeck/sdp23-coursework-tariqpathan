@@ -43,9 +43,9 @@ public class Main {
 		catch (DuplicateLabelException e) {
 			System.out.println(e.getMessage());
 		}
-		catch (ArithmeticException e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
+		catch (ArithmeticException | NullPointerException e) {
+			System.out.println("Error during execution of program");
+			System.out.println("Cause: " + e.getMessage());
 		}
 	}
 }

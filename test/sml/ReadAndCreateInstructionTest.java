@@ -1,10 +1,9 @@
-package instructionFactory;
+package sml;
 
-import org.junit.jupiter.api.*;
-import sml.Instruction;
-import sml.Machine;
-import sml.Registers;
-import sml.Translator;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class ReadAndCreateInstructionTest {
   private Machine machine;

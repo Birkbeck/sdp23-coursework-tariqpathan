@@ -30,10 +30,15 @@ public class JnzInstruction extends Instruction {
 	@Override
 	public int execute(Machine m) throws NullPointerException {
 		// throws an exception if label invalid, even if not jumping
-		int goToAddress = m.getLabels().getAddress(goToLabel);
-		int value = m.getRegisters().get(source);
-		if (value == 0) return NORMAL_PROGRAM_COUNTER_UPDATE;
-		return goToAddress;
+		try {
+			int goToAddress = m.getLabels().getAddress(goToLabel);
+			int value = m.getRegisters().get(source);
+			if (value == 0) return NORMAL_PROGRAM_COUNTER_UPDATE;
+			return goToAddress;
+		} catch (NullPointerException exc) {
+			throw new NullPointerException("The label: " + goToLabel + " does not exist");
+		}
+
 	}
 
 	@Override

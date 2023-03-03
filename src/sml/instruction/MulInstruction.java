@@ -28,12 +28,8 @@ public class MulInstruction extends Instruction {
 	public int execute(Machine m) {
 		int value1 = m.getRegisters().get(result);
 		int value2 = m.getRegisters().get(source);
-		try {
-			m.getRegisters().set(result, value1 * value2);
-			return NORMAL_PROGRAM_COUNTER_UPDATE;
-		} catch (ArithmeticException exc) {
-			throw exc;
-		}
+		m.getRegisters().set(result, value1 * value2);
+		return NORMAL_PROGRAM_COUNTER_UPDATE;
 	}
 
 	@Override
