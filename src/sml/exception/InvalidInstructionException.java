@@ -1,8 +1,24 @@
 package sml.exception;
 
+/**
+ * Catches Various Exceptions thrown during the initialisation of a machine's program
+ * Re-throws with additional context and information
+ *
+ * Provides user the string of the instruction causing the error and the error message throwing
+ * the original exception.
+ *
+ * @author Tariq Pathan
+ */
 public class InvalidInstructionException extends Exception {
     private final String message;
 
+    /**
+     * Constructor: label causing the error, the programs ArrayList and the index
+     * @param cause original exception that threw the error
+     * @param label label for the instruction generating the error (null if no label)
+     * @param opcode required, opcode of instruction
+     * @param line rest of line from the parsed instruction that is causing the error.
+     */
     public InvalidInstructionException(Throwable cause,
                                        String label, String opcode, String line) {
         super(cause);
