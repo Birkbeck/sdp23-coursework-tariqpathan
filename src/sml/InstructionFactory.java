@@ -8,6 +8,8 @@ import java.util.stream.IntStream;
  * Represents an instruction factory for creating Instructions using reflection API.
  * Appropriate class names for instructions are found via opcode.
  * The opcode for XyzInstruction would also be xyz and must be unique.
+ * Use of static means that in modern JVMs, this implementation is thread-safe
+ * (instead of lazy loading).
  *
  * @author Tariq Pathan
  */
@@ -15,17 +17,20 @@ import java.util.stream.IntStream;
 
 public class InstructionFactory {
 
-    private static final InstructionFactory instance = new InstructionFactory();
+    private static final InstructionFactory INSTANCE = new InstructionFactory();
 
     /**
-     * Gets the instance of the instruction factory, of which there should only be one.
+     * Gets the INSTANCE of the instruction factory, of which there should only be one.
      */
+    private InstructionFactory() {
+    }
+
     public static InstructionFactory getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     private String createClassName(String opcode) {
-        String packageAddress = "sml.instruction";
+        String packageAddress = "sml.instruction.";
         String capitalisedOpcode = opcode.substring(0, 1).toUpperCase() + opcode.substring(1);
         String superClassName = "Instruction";
         return packageAddress + capitalisedOpcode + superClassName;
@@ -38,8 +43,8 @@ public class InstructionFactory {
         if (instruction.getSuperclass() != Instruction.class) {
             throw new IllegalArgumentException("Invalid opcode");
         }
-        Constructor constructor = instruction.getDeclaredConstructor();
-        return constructor;
+        Constructor[] constructors = instruction.getDeclaredConstructors();
+        return constructors[0];
     }
 
     private Object[] getConstructorArgs(Constructor constructor, String label, String[] stringArgs)
@@ -92,6 +97,5 @@ public class InstructionFactory {
         Object[] constructorArgs = getConstructorArgs(constructor, label, args);
         return (Instruction) constructor.newInstance(constructorArgs);
     }
-
 }
 
