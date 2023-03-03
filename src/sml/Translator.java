@@ -158,7 +158,7 @@ public final class Translator {
 
     public static void main(String[] args) throws InvalidInstructionException {
         Translator t = new Translator("xyz");
-        t.line = "add E0X EBX";
+        t.line = "add EAX";
         Instruction i = t.getInstruction(null);
     }
 }
