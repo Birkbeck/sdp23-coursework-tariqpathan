@@ -8,7 +8,6 @@ import sml.exception.InvalidInstructionException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -112,22 +111,5 @@ public final class Translator {
             }
 
         return line;
-    }
-
-    //TODO: remove main method
-    public static void main(String[] args) {
-        Translator t = new Translator("abc");
-        String[] errors = {
-                "abc EAX EAX", "add ZZZ EAX", "add EAX EAX EAX", "sub 4 EAX", "mul EAX 5",
-                "div ECX", "jnz ECX f100", "mov EAX abd"};
-        Arrays.asList(errors).forEach(e -> {
-            System.out.println(e);
-            try {
-                t.line = e;
-                t.getInstruction(null);
-            } catch (InvalidInstructionException exc) {
-                System.out.println(exc.getMessage());
-            }
-        });
     }
 }

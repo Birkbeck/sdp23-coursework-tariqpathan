@@ -22,7 +22,6 @@ public final class Labels {
 	 */
 	public void addLabel(String label, int address) throws IllegalArgumentException{
 		Objects.requireNonNull(label);
-		// TODO: Add a check that there are no label duplicates.
 		if (labels.containsKey(label)) {
 			throw new IllegalArgumentException(label);
 		}
@@ -53,14 +52,12 @@ public final class Labels {
 	 */
 	@Override
 	public String toString() {
-		// TODO: Implement the method using the Stream API (see also class Registers). Attempted
 		return labels.entrySet().stream()
 				.sorted(Map.Entry.comparingByKey())
 				.map(e -> e.getKey() + " -> " + e.getValue())
 				.collect(Collectors.joining(", ", "[", "]"));
 	}
 
-	// TODO: Implement equals and hashCode (needed in class Machine). Check
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -82,23 +79,4 @@ public final class Labels {
 	public void reset() {
 		labels.clear();
 	}
-
-	//TODO: remove main method
-	public static void main(String[] args) {
-		Labels l = new Labels();
-		l.addLabel("one", 1);
-		l.addLabel("two", 2);
-		l.getAddress(null);
-
-		Labels m = new Labels();
-		m.addLabel("two", 1);
-		m.addLabel("one", 2);
-//		m.addLabel("one", 3);
-		Object p = new Object();
-		System.out.println("with hashmap: " + l.equals(m));
-		System.out.println("with o: " + l.equals(p));
-		System.out.println(l.toString());
-//		l.getAddress("three");
-	}
-
 }
