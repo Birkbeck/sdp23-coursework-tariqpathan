@@ -23,7 +23,7 @@ public final class Labels {
 	 *
 	 * @param label the label
 	 * @param address the address the label refers to in the program ArrayList of Instructions.
-	 * @Exception IllegalArgumentException thrown if label is not unique
+	 * @throws IllegalArgumentException thrown if label is not unique
 	 */
 	public void addLabel(String label, int address) throws IllegalArgumentException{
 		Objects.requireNonNull(label);
@@ -38,7 +38,7 @@ public final class Labels {
 	 *
 	 * @param label the label
 	 * @return the address the label refers to, to be looked up in program ArrayList
-	 * @Exception NullPointerException if a matching key is not found.
+	 * @throws NullPointerException if a matching key is not found.
 	 */
 	public int getAddress(String label) {
 		if (!labels.containsKey(label)) throw new NullPointerException("no label exists");

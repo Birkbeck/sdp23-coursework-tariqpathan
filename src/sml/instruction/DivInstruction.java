@@ -37,7 +37,7 @@ public class DivInstruction extends Instruction {
 	 *
 	 * @param m The instance of the machine where the instruction is executed
 	 * @return on successful execution, a NORMAL_PROGRAM_COUNTER_UPDATE is returned
-	 * @Exception throws ArithmeticException if source register is 0 and division is attempted.
+	 * @throws ArithmeticException if source register is 0 and division is attempted.
 	 */
 	@Override
 	public int execute(Machine m) throws IllegalArgumentException {
