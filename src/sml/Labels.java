@@ -1,7 +1,5 @@
 package sml;
 
-import sml.instruction.JnzInstruction;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -22,12 +20,11 @@ public final class Labels {
 	 * @param label the label
 	 * @param address the address the label refers to
 	 */
-	public void addLabel(String label, int address) {
+	public void addLabel(String label, int address) throws IllegalArgumentException{
 		Objects.requireNonNull(label);
 		// TODO: Add a check that there are no label duplicates.
 		if (labels.containsKey(label)) {
-			throw new IllegalArgumentException(
-				label + " already exists and has an address of " + labels.get(label));
+			throw new IllegalArgumentException(label);
 		}
 		labels.put(label, address);
 	}

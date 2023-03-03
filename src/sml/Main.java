@@ -1,5 +1,8 @@
 package sml;
 
+import sml.exception.DuplicateLabelException;
+import sml.exception.InvalidInstructionException;
+
 import java.io.IOException;
 
 public class Main {
@@ -33,6 +36,12 @@ public class Main {
 		}
 		catch (IOException e) {
 			System.out.println("Error reading the program from " + args[0]);
+		}
+		catch (InvalidInstructionException e) {
+			System.out.println(e.getMessage());
+		}
+		catch (DuplicateLabelException e) {
+			System.out.println(e.getMessage());
 		}
 	}
 }

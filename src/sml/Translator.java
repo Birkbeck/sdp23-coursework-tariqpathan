@@ -1,10 +1,14 @@
 package sml;
 
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import sml.exception.DuplicateLabelException;
+import sml.exception.InvalidInstructionException;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -32,7 +36,8 @@ public final class Translator {
     // prog (the program)
     // return "no errors were detected"
 
-    public void readAndTranslate(Labels labels, List<Instruction> program) throws IOException {
+    public void readAndTranslate(Labels labels, List<Instruction> program) throws IOException,
+            InvalidInstructionException, DuplicateLabelException {
         try (var sc = new Scanner(new File(fileName), StandardCharsets.UTF_8)) {
             labels.reset();
             program.clear();
@@ -49,6 +54,9 @@ public final class Translator {
                     program.add(instruction);
                 }
             }
+        } catch (IllegalArgumentException exc) {
+            int index = labels.getAddress(exc.getMessage());
+            throw new DuplicateLabelException(exc.getMessage(), program, index);
         }
     }
 
@@ -61,17 +69,23 @@ public final class Translator {
      * The input line should consist of a single SML instruction,
      * with its label already removed.
      */
-    private Instruction getInstruction(String label) {
+    private Instruction getInstruction(String label) throws InvalidInstructionException {
         if (line.isEmpty())
             return null;
 
         String opcode = scan();
         var factory = new ClassPathXmlApplicationContext("/beans.xml");
-        InstructionFactory instructionFactory = (InstructionFactory) factory.getBean(opcode);
-        String[] args = line.trim().split("\\s+");
-        if (!instructionFactory.checkArgLength(args)) return null;
-        Instruction instruction = instructionFactory.create(label, args);
-        return instruction;
+        try {
+            InstructionFactory instructionFactory = (InstructionFactory) factory.getBean(opcode);
+            String[] args = line.trim().split("\\s+");
+            if (!instructionFactory.checkArgLength(args)) {
+                throw new IllegalArgumentException("Invalid number of arguments for instruction type");
+            }
+            Instruction instruction = instructionFactory.create(label, args);
+            return instruction;
+        } catch (NoSuchBeanDefinitionException | IllegalArgumentException exc) {
+            throw new InvalidInstructionException(exc, label, opcode, line);
+        }
     }
 
     private String getLabel() {
@@ -99,5 +113,21 @@ public final class Translator {
             }
 
         return line;
+    }
+
+    public static void main(String[] args) {
+        Translator t = new Translator("abc");
+        String[] errors = {
+                "abc EAX EAX", "add ZZZ EAX", "add EAX EAX EAX", "sub 4 EAX", "mul EAX 5",
+                "div ECX", "jnz ECX f100", "mov EAX abd"};
+        Arrays.asList(errors).forEach(e -> {
+            System.out.println(e);
+            try {
+                t.line = e;
+                t.getInstruction(null);
+            } catch (InvalidInstructionException exc) {
+                System.out.println(exc.getMessage());
+            }
+        });
     }
 }
