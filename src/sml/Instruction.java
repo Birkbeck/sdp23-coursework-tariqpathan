@@ -66,7 +66,6 @@ public abstract class Instruction {
 	 *
 	 * @return String value of the instruction
 	 */
-
 	@Override
 	public abstract String toString();
 
