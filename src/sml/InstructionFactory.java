@@ -6,7 +6,7 @@ package sml;
  * e.g "XyzInstruction" is made by "XyzInstructionFactory"
  * This also requires a bean with the id as "xyz" in the "/resources/beans.xml" file.
  * The opcode for XyzInstruction would also be xyz and must be unique.
- *
+ * <p>
  * argRequired method was included as this number would be decided by the create method,
  * which the factory is responsible for.
  *
@@ -19,6 +19,7 @@ public abstract class InstructionFactory {
     /**
      * Constructor: number of Strings in the args array that are required for the create method.
      * This number does not include the label.
+     *
      * @param argsRequired int required for length of args array
      */
     public InstructionFactory(int argsRequired) {
@@ -26,10 +27,9 @@ public abstract class InstructionFactory {
     }
 
     /**
-     *
      * @param label (can be null)
-     * @param args Array of strings that will be converted to the appropriate type by the factory
-     *             create method
+     * @param args  Array of strings that will be converted to the appropriate type by the factory
+     *              create method
      * @return Instruction
      */
     public abstract Instruction create(String label, String[] args);

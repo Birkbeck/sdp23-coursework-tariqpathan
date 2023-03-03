@@ -10,8 +10,8 @@ import sml.Translator;
 
 class ReadAndTranslateExceptionsTest {
     private Machine machine;
-    private String filePath = "./test-resources/throwsExceptionReadAndTranslate/";
-    private String extension = ".sml";
+    private final String filePath = "./test-resources/throwsExceptionReadAndTranslate/";
+    private final String extension = ".sml";
 
     @BeforeEach
     void setUp() {
@@ -46,7 +46,7 @@ class ReadAndTranslateExceptionsTest {
     }
 
     @Test
-    // setting int value > int.MAX_VALUE
+        // setting int value > int.MAX_VALUE
     void largeNumberThrows() {
         String errorType = "largeNumber";
         String fileName = filePath + errorType + extension;

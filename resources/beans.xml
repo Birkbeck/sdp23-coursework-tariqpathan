@@ -12,7 +12,7 @@
     <!-- enable the usage of annotations -->
     <context:annotation-config/>
 
-    <!--  -->
+    <!-- beans for instruction factories -->
     <bean id="add" class="sml.instructionFactory.AddInstructionFactory"/>
     <bean id="div" class="sml.instructionFactory.DivInstructionFactory"/>
     <bean id="jnz" class="sml.instructionFactory.JnzInstructionFactory"/>

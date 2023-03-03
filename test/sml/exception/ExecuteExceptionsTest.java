@@ -11,8 +11,8 @@ import sml.Translator;
 public class ExecuteExceptionsTest {
 
     private Machine machine;
-    private String filePath = "./test-resources/throwsExceptionExecute/";
-    private String extension = ".sml";
+    private final String filePath = "./test-resources/throwsExceptionExecute/";
+    private final String extension = ".sml";
 
     @BeforeEach
     void setUp() {
@@ -43,5 +43,4 @@ public class ExecuteExceptionsTest {
         Exception thrown = Assertions.assertThrows(NullPointerException.class,
                 () -> machine.execute());
     }
-
 }

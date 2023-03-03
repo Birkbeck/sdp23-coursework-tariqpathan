@@ -15,10 +15,11 @@ public class DuplicateLabelException extends Exception {
 
     /**
      * Constructor: label causing the error, the programs ArrayList and the index
-     * @param label required, the duplicate label String
+     *
+     * @param label    required, the duplicate label String
      * @param programs required, the ArrayList of instructions
-     * @param index required, the index value of the existing instruction with label
-     *              that already exists.
+     * @param index    required, the index value of the existing instruction with label
+     *                 that already exists.
      */
     public DuplicateLabelException(String label,
                                    List<Instruction> programs, int index) {

@@ -6,7 +6,7 @@ package sml.provider;
  *
  * @author Tariq Pathan
  */
-public class IntProviderImpl implements IntProvider{
+public class IntProviderImpl implements IntProvider {
 
     @Override
     public int getInt(String value) {

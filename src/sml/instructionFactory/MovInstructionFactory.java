@@ -3,9 +3,9 @@ package sml.instructionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import sml.InstructionFactory;
 import sml.RegisterName;
+import sml.instruction.MovInstruction;
 import sml.provider.IntProvider;
 import sml.provider.RegisterNameProvider;
-import sml.instruction.MovInstruction;
 
 /**
  * Creates a MovInstruction, with the RegisterNames added via the RegisterNameProvider
@@ -21,8 +21,9 @@ public class MovInstructionFactory extends InstructionFactory {
 
     /**
      * Constructor: Providers that help to convert the Strings to appropriate types
+     *
      * @param registerNameProvider set in the /resources/beans.xml file
-     * @param intProvider set in the /resources/beans.xml file
+     * @param intProvider          set in the /resources/beans.xml file
      */
     @Autowired
     public MovInstructionFactory(RegisterNameProvider registerNameProvider,

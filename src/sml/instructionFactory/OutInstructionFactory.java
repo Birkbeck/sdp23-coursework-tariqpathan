@@ -14,11 +14,12 @@ import sml.provider.RegisterNameProvider;
  */
 public class OutInstructionFactory extends InstructionFactory {
 
-    private final RegisterNameProvider registerNameProvider;
     private static final int ARGS_REQUIRED = 1;
+    private final RegisterNameProvider registerNameProvider;
 
     /**
      * Constructor: Providers that help to convert the Strings to appropriate types
+     *
      * @param registerNameProvider set in the /resources/beans.xml file
      */
     @Autowired

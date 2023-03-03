@@ -1,5 +1,5 @@
 package sml.provider;
 
 public interface IntProvider {
-    public int getInt(String value);
+    int getInt(String value);
 }
