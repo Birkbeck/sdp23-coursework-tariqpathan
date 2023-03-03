@@ -8,7 +8,7 @@ import sml.Machine;
 import sml.Registers;
 import sml.Translator;
 
-class ReadAndCreateExceptionsThrownTest {
+class ReadAndTranslateExceptionsTest {
     private Machine machine;
     private String filePath = "./test-resources/throwsExceptionReadAndTranslate/";
     private String extension = ".sml";
