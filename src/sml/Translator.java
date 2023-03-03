@@ -12,11 +12,14 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * This class ....
+ * This class translates an sml file into a list of instructions that are called
+ * when a machines execute method is called.
+ * This class is responsible for converting the instructions in String format to
+ * an Instruction format that can be used with a machine instance.
  * <p>
  * The translator of a <b>S</b><b>M</b>al<b>L</b> program.
  *
- * @author ...
+ * @author Tariq Pathan
  */
 public final class Translator {
 
@@ -73,12 +76,16 @@ public final class Translator {
         String opcode = scan();
         var factory = new ClassPathXmlApplicationContext("/beans.xml");
         try {
+            // get correct instruction factory
             InstructionFactory instructionFactory = (InstructionFactory) factory.getBean(opcode);
+
+            // check instruction format matches factory requirement before creating
             String[] args = line.trim().split("\\s+");
             if (instructionFactory.getArgLengthRequired() != args.length) {
                 throw new IllegalArgumentException(instructionFactory.getArgLengthRequired()
                         + " arguments required after opcode, but " + args.length + " provided");
             }
+
             Instruction instruction = instructionFactory.create(label, args);
             return instruction;
         } catch (NoSuchBeanDefinitionException | IllegalArgumentException exc) {
