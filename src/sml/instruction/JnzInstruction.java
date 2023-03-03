@@ -6,27 +6,44 @@ import sml.RegisterName;
 
 import java.util.Objects;
 
-// TODO: write a JavaDoc for the class
 
 /**
- * @author
+ * Performs a jump operation to specified label if the source register value is not 0.
+ *
  * Labels can only be checked after all instructions are added.
  * This is because a label allows a jump 'forward' to an instruction not yet added.
- * Here, labels are only checked when execute is called.
+ * Labels are checked for validity when execute is called.
+ *
+ * @author Tariq Pathan
  */
-
 public class JnzInstruction extends Instruction {
 	private final RegisterName source;
 	private final String goToLabel;
 
 	public static final String OP_CODE = "jnz";
 
+	/**
+	 * Constructor: specifies the label (if it exists), the register value to be checked
+	 * and the label for the instruction to jump to.
+	 * @param label optional label (can be null)
+	 * @param source the register where the value is checked
+	 * @param goToLabel the String value of the label to jump to
+	 */
 	public JnzInstruction(String label, RegisterName source, String goToLabel) {
 		super(label, OP_CODE);
 		this.source = source;
 		this.goToLabel = goToLabel;
 	}
 
+	/**
+	 * Carries out the execution of the instruction
+	 * It is called by a machine instance (i.e. machine.execute())
+	 *
+	 * @param m The instance of the machine where the instruction is executed
+	 * @return int NORMAL_PROGRAM_COUNTER_UPDATE if the source value is 0
+	 * else, the program counter value for a valid label is returned
+	 * @Exception throws NullPointerException if a valid address is not found for a label.
+	 */
 	@Override
 	public int execute(Machine m) throws NullPointerException {
 		// throws an exception if label invalid, even if not jumping
@@ -51,7 +68,6 @@ public class JnzInstruction extends Instruction {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		// fully compares fields
 		if (o instanceof JnzInstruction other) {
 			return Objects.equals(this.label, other.label)
 					&& Objects.equals(this.source, other.source)

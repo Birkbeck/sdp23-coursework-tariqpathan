@@ -1,7 +1,5 @@
 package sml;
 
-// TODO: write a JavaDoc for the class
-
 /**
  * Represents an abstract instruction for Instruction subclasses.
  * Subclasses must be named OpcodeInstruction, where Opcode is a 3-character opcode.
@@ -17,7 +15,8 @@ public abstract class Instruction {
 	 * (opcode must be an operation of the language)
 	 *
 	 * @param label optional label (can be null)
-	 * @param opcode operation name, must be lowercase and 3 characters
+	 * @param opcode operation name, must be lowercase and 3 characters and must match
+	 *               instruction. e.g. opcode "abc" for AbcInstruction
 	 */
 	public Instruction(String label, String opcode) {
 		this.label = label;
@@ -61,12 +60,33 @@ public abstract class Instruction {
 	// If the subclass extending instruction.java does not implement the method, that subclass
 	// must also be declared as abstract.
 
+	/**
+	 * Provides a String representation of the Instruction in the format:
+	 * label: opcode operand1 operandN (label can be optional)
+	 *
+	 * @return String value of the instruction
+	 */
+
 	@Override
 	public abstract String toString();
 
+	/**
+	 * Compares object to Instruction
+	 *
+	 * @param obj object to compare to
+	 * @return true if obj is an instruction and label, opcode and operands match
+	 * else returns false
+	 *
+	 */
 	@Override
 	public abstract boolean equals(Object obj);
 
+	/**
+	 * For equals and hashcode contract. Makes sure that hashcode for Instructions
+	 * that have the same label, opcode and operands are the same.
+	 *
+	 * @return integer
+	 */
 	@Override
 	public abstract int hashCode();
 
