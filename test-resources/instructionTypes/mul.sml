@@ -1,1 +1,0 @@
-mul EAX EBX

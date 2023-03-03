@@ -1,10 +1,8 @@
 package sml.provider;
 
-import org.springframework.stereotype.Component;
 import sml.RegisterName;
 import sml.Registers;
 
-@Component
 public class RegisterNameProviderImpl implements RegisterNameProvider {
 
     @Override

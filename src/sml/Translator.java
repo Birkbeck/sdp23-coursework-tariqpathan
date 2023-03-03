@@ -26,8 +26,6 @@ public final class Translator {
     // line contains the characters in the current line that's not been processed yet
     private String line = "";
 
-    private String folderPath = "./instruction/";
-
     public Translator(String fileName) {
         this.fileName =  fileName;
     }
