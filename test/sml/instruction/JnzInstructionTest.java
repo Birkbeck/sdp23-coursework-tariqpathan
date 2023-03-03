@@ -5,9 +5,6 @@ import sml.Instruction;
 import sml.Machine;
 import sml.Registers;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
 import static sml.Instruction.NORMAL_PROGRAM_COUNTER_UPDATE;
 import static sml.Registers.Register.*;
 
@@ -55,6 +52,18 @@ class JnzInstructionTest {
     String goToLabel = "f1";
     Instruction instruction = new JnzInstruction(null, EAX, goToLabel);
     Assertions.assertEquals(NORMAL_PROGRAM_COUNTER_UPDATE, instruction.execute(machine));
+  }
+
+  @Test
+  void executeInvalidLabel() {
+    registers.set(EAX, 5);
+    Instruction instruction = new JnzInstruction(null, EAX, "invalid");
+    Exception thrown = Assertions.assertThrows(
+            NullPointerException.class,
+            () -> instruction.execute(machine)
+    );
+    Assertions.assertEquals("The label: invalid does not exist\n" +
+            "Caused by instruction: jnz EAX invalid", thrown.getMessage());
   }
 
 

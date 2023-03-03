@@ -80,7 +80,8 @@ class DivInstructionTest {
             ArithmeticException.class,
             () -> instruction.execute(machine)
     );
-    Assertions.assertEquals("/ by zero", thrown.getMessage());
+    Assertions.assertEquals("/ by zero. Register: EBX has a value of 0\n" +
+            "Caused by instruction: div EAX EBX", thrown.getMessage());
   }
 
   @Test

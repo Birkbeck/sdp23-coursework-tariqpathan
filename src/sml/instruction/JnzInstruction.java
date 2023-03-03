@@ -36,7 +36,8 @@ public class JnzInstruction extends Instruction {
 			if (value == 0) return NORMAL_PROGRAM_COUNTER_UPDATE;
 			return goToAddress;
 		} catch (NullPointerException exc) {
-			throw new NullPointerException("The label: " + goToLabel + " does not exist");
+			throw new NullPointerException("The label: " + goToLabel + " does not exist\n"
+					+ "Caused by instruction: " + this.toString());
 		}
 
 	}

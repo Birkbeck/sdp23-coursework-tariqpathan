@@ -32,7 +32,9 @@ public class DivInstruction extends Instruction {
 			m.getRegisters().set(result, value1 / value2);
 			return NORMAL_PROGRAM_COUNTER_UPDATE;
 		} catch (ArithmeticException exc) {
-			throw exc;
+			throw new ArithmeticException("/ by zero. " + "Register: "
+					+ this.source.toString() + " has a value of 0\n"
+					+ "Caused by instruction: " + this.toString());
 		}
 	}
 
