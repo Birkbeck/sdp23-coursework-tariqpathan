@@ -10,6 +10,9 @@ import java.util.Objects;
 
 /**
  * @author
+ * Labels can only be checked after all instructions are added.
+ * This is because a label allows a jump 'forward' to an instruction not yet added.
+ * Here, labels are only checked when execute is called.
  */
 
 public class JnzInstruction extends Instruction {
@@ -26,9 +29,10 @@ public class JnzInstruction extends Instruction {
 
 	@Override
 	public int execute(Machine m) throws NullPointerException {
+		// throws an exception if label invalid, even if not jumping
+		int goToAddress = m.getLabels().getAddress(goToLabel);
 		int value = m.getRegisters().get(source);
 		if (value == 0) return NORMAL_PROGRAM_COUNTER_UPDATE;
-		int goToAddress = m.getLabels().getAddress(goToLabel);
 		return goToAddress;
 	}
 
