@@ -1,5 +1,8 @@
 package sml;
 
+import sml.exception.DuplicateLabelException;
+import sml.exception.InvalidInstructionException;
+
 import java.io.IOException;
 
 public class Main {
@@ -26,10 +29,20 @@ public class Main {
 			m.execute();
 			System.out.println("Ending program execution.");
 
-			System.out.println("Values of registers at program termination:" + m.getRegisters() + ".");
+			System.out.println("Values of registers at program termination: " + m.getRegisters() + ".");
 		}
 		catch (IOException e) {
 			System.out.println("Error reading the program from " + args[0]);
+		}
+		catch (InvalidInstructionException e) {
+			System.out.println(e.getMessage());
+		}
+		catch (DuplicateLabelException e) {
+			System.out.println(e.getMessage());
+		}
+		catch (ArithmeticException | NullPointerException e) {
+			System.out.println("Error during execution of program");
+			System.out.println("Cause: " + e.getMessage());
 		}
 	}
 }

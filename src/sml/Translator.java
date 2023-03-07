@@ -1,5 +1,7 @@
 package sml;
 
+import sml.exception.DuplicateLabelException;
+import sml.exception.InvalidInstructionException;
 import sml.instruction.*;
 
 import java.io.File;
@@ -11,11 +13,14 @@ import java.util.Scanner;
 import static sml.Registers.Register;
 
 /**
- * This class ....
+ * This class translates an sml file into a list of instructions that are called
+ * when a machines execute method is called.
+ * This class is responsible for converting the instructions in String format to
+ * an Instruction format that can be used with a machine instance.
  * <p>
  * The translator of a <b>S</b><b>M</b>al<b>L</b> program.
  *
- * @author ...
+ * @author Tariq Pathan
  */
 public final class Translator {
 
@@ -32,7 +37,8 @@ public final class Translator {
     // prog (the program)
     // return "no errors were detected"
 
-    public void readAndTranslate(Labels labels, List<Instruction> program) throws IOException {
+    public void readAndTranslate(Labels labels, List<Instruction> program) throws IOException,
+            InvalidInstructionException, DuplicateLabelException {
         try (var sc = new Scanner(new File(fileName), StandardCharsets.UTF_8)) {
             labels.reset();
             program.clear();
@@ -49,6 +55,11 @@ public final class Translator {
                     program.add(instruction);
                 }
             }
+        } catch (IllegalArgumentException exc) {
+            int index = labels.getAddress(exc.getMessage());
+            throw new DuplicateLabelException(exc.getMessage(), program, index);
+        } catch (NullPointerException exc) {
+            throw new InvalidInstructionException(exc, null, null, line);
         }
     }
 
@@ -61,32 +72,62 @@ public final class Translator {
      * The input line should consist of a single SML instruction,
      * with its label already removed.
      */
-    private Instruction getInstruction(String label) {
+    private Instruction getInstruction(String label) throws InvalidInstructionException {
         if (line.isEmpty())
             return null;
 
         String opcode = scan();
-        switch (opcode) {
-            case AddInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new AddInstruction(label, Register.valueOf(r), Register.valueOf(s));
+        try{
+            switch (opcode) {
+                case AddInstruction.OP_CODE -> {
+                    String r = scan();
+                    String s = scan();
+                    return new AddInstruction(label, Register.valueOf(r), Register.valueOf(s));
+                }
+                case DivInstruction.OP_CODE -> {
+                    String r = scan();
+                    String s = scan();
+                    return new DivInstruction(label, Register.valueOf(r), Registers.Register.valueOf(s));
+                }
+                case JnzInstruction.OP_CODE -> {
+                    String s = scan();
+                    String L = scan();
+                    return new JnzInstruction(label, Register.valueOf(s), L);
+                }
+                case MovInstruction.OP_CODE -> {
+                    String r = scan();
+                    String x = scan();
+                    try {
+                        int source = Integer.parseInt(x);
+                        return new MovInstruction(label, Register.valueOf(r), source);
+                    } catch (NumberFormatException exc) {
+                        throw new InvalidInstructionException(exc, label, opcode, line);
+                    }
+                }
+                case MulInstruction.OP_CODE -> {
+                    String r = scan();
+                    String s = scan();
+                    return new MulInstruction(label, Register.valueOf(r), Register.valueOf(s));
+                }
+                case OutInstruction.OP_CODE -> {
+                    String s = scan();
+                    return new OutInstruction(label, Register.valueOf(s));
+                }
+                case SubInstruction.OP_CODE -> {
+                    String r = scan();
+                    String s = scan();
+                    return new SubInstruction(label, Register.valueOf(r), Register.valueOf(s));
+                }
+
+                default -> {
+                    throw new InvalidInstructionException(
+                            new IllegalArgumentException("Unknown instruction"), label, opcode, line);
+                }
             }
-
-            // TODO: add code for all other types of instructions
-
-            // TODO: Then, replace the switch by using the Reflection API
-
-            // TODO: Next, use dependency injection to allow this machine class
-            //       to work with different sets of opcodes (different CPUs)
-
-            default -> {
-                System.out.println("Unknown instruction: " + opcode);
-            }
+        } catch (IllegalArgumentException exc) {
+            throw new InvalidInstructionException(exc, label, opcode, line);
         }
-        return null;
     }
-
 
     private String getLabel() {
         String word = scan();
@@ -113,5 +154,11 @@ public final class Translator {
             }
 
         return line;
+    }
+
+    public static void main(String[] args) throws InvalidInstructionException {
+        Translator t = new Translator("xyz");
+        t.line = "add EAX";
+        Instruction i = t.getInstruction(null);
     }
 }

@@ -1,14 +1,13 @@
 package sml.instruction;
 
 import org.junit.jupiter.api.*;
-
 import sml.Instruction;
 import sml.Machine;
 import sml.Registers;
 
 import static sml.Registers.Register.*;
 
-class AddInstructionTest {
+class MulInstructionTest {
   private Machine machine;
   private Registers registers;
 
@@ -26,14 +25,14 @@ class AddInstructionTest {
   }
   @Test
   void labelValid() {
-    Instruction instruction = new AddInstruction("aLabel", EDI, EDI);
+    Instruction instruction = new MulInstruction("aLabel", EDI, EDI);
     Assertions.assertEquals("aLabel", instruction.getLabel());
     }
 
   @Test
   void OPCodeValid() {
-    Instruction instruction = new AddInstruction(null, EDI, EDI);
-    Assertions.assertEquals("add", instruction.getOpcode());
+    Instruction instruction = new MulInstruction(null, EDI, EDI);
+    Assertions.assertEquals("mul", instruction.getOpcode());
     }
 
 
@@ -41,76 +40,76 @@ class AddInstructionTest {
   void executeValid() {
     registers.set(EAX, 5);
     registers.set(EBX, 6);
-    Instruction instruction = new AddInstruction(null, EAX, EBX);
+    Instruction instruction = new MulInstruction(null, EAX, EBX);
     instruction.execute(machine);
-    Assertions.assertEquals(11, machine.getRegisters().get(EAX));
+    Assertions.assertEquals(30, machine.getRegisters().get(EAX));
   }
 
   @Test
   void executeValidWithNegativeResultRegister() {
     registers.set(EAX, -5);
     registers.set(EBX, 6);
-    Instruction instruction = new AddInstruction(null, EAX, EBX);
+    Instruction instruction = new MulInstruction(null, EAX, EBX);
     instruction.execute(machine);
-    Assertions.assertEquals(1, machine.getRegisters().get(EAX));
+    Assertions.assertEquals(-30, machine.getRegisters().get(EAX));
   }
 
   @Test
   void executeValidWithNegativeSourceRegister() {
     registers.set(EAX, 5);
     registers.set(EBX, -6);
-    Instruction instruction = new AddInstruction(null, EAX, EBX);
+    Instruction instruction = new MulInstruction(null, EAX, EBX);
     instruction.execute(machine);
-    Assertions.assertEquals(-1, machine.getRegisters().get(EAX));
+    Assertions.assertEquals(-30, machine.getRegisters().get(EAX));
   }
 
   @Test
   void executeValidWithBothNegativeRegisters() {
     registers.set(EAX, -5);
     registers.set(EBX, -6);
-    Instruction instruction = new AddInstruction(null, EAX, EBX);
+    Instruction instruction = new MulInstruction(null, EAX, EBX);
     instruction.execute(machine);
-    Assertions.assertEquals(-11, machine.getRegisters().get(EAX));
+    Assertions.assertEquals(30, machine.getRegisters().get(EAX));
   }
 
   @Test
-  void executeValidWithZeroRegisterValues() {
-    registers.set(EAX, 0);
-    registers.set(EBX, 0);
-    Instruction instruction = new AddInstruction(null, EAX, EBX);
+  void executeValidWithZeroValue() {
+    registers.set(EAX, -5);
+    registers.set(EBX,0);
+    Instruction instruction = new MulInstruction(null, EAX, EBX);
     instruction.execute(machine);
     Assertions.assertEquals(0, machine.getRegisters().get(EAX));
   }
 
   @Test
   void executeValidWithSameSourceAndResultRegister() {
-    registers.set(EAX, 2);
-    Instruction instruction = new AddInstruction(null, EAX, EAX);
+    registers.set(EAX, 6);
+    Instruction instruction = new MulInstruction(null, EAX, EAX);
     instruction.execute(machine);
-    Assertions.assertEquals(4, machine.getRegisters().get(EAX));
+    Assertions.assertEquals(36, machine.getRegisters().get(EAX));
   }
 
   @Test
   void toStringWithoutLabelValid() {
     registers.set(EAX, -5);
     registers.set(EBX, 6);
-    Instruction instruction = new AddInstruction(null, EAX, EBX);
-    Assertions.assertEquals("add EAX EBX", instruction.toString());
+    Instruction instruction = new MulInstruction(null, EAX, EBX);
+    Assertions.assertEquals("mul EAX EBX", instruction.toString());
   }
 
   @Test
   void toStringWithLabelValid() {
     registers.set(ECX, 4);
     registers.set(ESI, 2);
-    Instruction instruction = new AddInstruction("addOne", ECX, ESI);
-    Assertions.assertEquals("addOne: add ECX ESI", instruction.toString());
+    Instruction instruction = new MulInstruction("labelOne", ECX, ESI);
+    Assertions.assertEquals("labelOne: mul ECX ESI", instruction.toString());
   }
 
   @Test
   void returnValueValid() {
     registers.set(EAX, 3);
     registers.set(EBP, 2);
-    Instruction instruction = new AddInstruction(null, EAX, EBP);
+    Instruction instruction = new MulInstruction(null, EAX, EBP);
     int returnValue = instruction.execute(machine);
     Assertions.assertEquals(-1, returnValue);
   }
@@ -124,7 +123,7 @@ class AddInstructionTest {
       registers.set(EAX, 1);
       registers.set(EBX, 2);
       registers.set(ECX, 3);
-      instructionOne = new AddInstruction("aLabel", EAX, EBX);
+      instructionOne = new MulInstruction("aLabel", EAX, EBX);
     }
 
     @AfterEach
@@ -139,22 +138,22 @@ class AddInstructionTest {
 
     @Test
     void equalsTrueWithSameValues() {
-      Instruction instructionTwo = new AddInstruction("aLabel", EAX, EBX);
+      Instruction instructionTwo = new MulInstruction("aLabel", EAX, EBX);
       Assertions.assertTrue(instructionOne.equals(instructionTwo));
       Assertions.assertTrue(instructionTwo.equals(instructionOne));
     }
 
     @Test
     void equalsFalseWithRegisterChange() {
-      Instruction instructionThree = new AddInstruction("aLabel", EAX, ECX);
+      Instruction instructionThree = new MulInstruction("aLabel", EAX, ECX);
       Assertions.assertFalse(instructionOne.equals(instructionThree));
       Assertions.assertFalse(instructionThree.equals(instructionOne));
     }
 
     @Test
     void equalsFalseWithLabelChange() {
-      Instruction instructionThree = new AddInstruction("aLabel", EAX, ECX);
-      Instruction instructionFour = new AddInstruction(null, EAX, EBX);
+      Instruction instructionThree = new MulInstruction("aLabel", EAX, ECX);
+      Instruction instructionFour = new MulInstruction(null, EAX, EBX);
       Assertions.assertFalse(instructionThree.equals(instructionFour));
       Assertions.assertFalse(instructionFour.equals(instructionThree));
     }
@@ -177,19 +176,19 @@ class AddInstructionTest {
 
     @Test
     void hashCodeForEqualValues() {
-      Instruction instructionTwo = new AddInstruction("aLabel", EAX, EBX);
+      Instruction instructionTwo = new MulInstruction("aLabel", EAX, EBX);
       Assertions.assertEquals(instructionOne.hashCode(), instructionTwo.hashCode());
     }
 
     @Test
     void hashCodeNotEqualWithRegisterChange() {
-      Instruction instructionThree = new AddInstruction("aLabel", EAX, ECX);
+      Instruction instructionThree = new MulInstruction("aLabel", EAX, ECX);
       Assertions.assertNotEquals(instructionOne.hashCode(), instructionThree.hashCode());
     }
 
     @Test
     void hashCodeNotEqualWithLabelChange() {
-      Instruction instructionFour = new AddInstruction(null, EAX, EBX);
+      Instruction instructionFour = new MulInstruction(null, EAX, EBX);
       Assertions.assertNotEquals(instructionOne.hashCode(), instructionFour.hashCode());
     }
 
